@@ -1114,80 +1114,80 @@ const CHUM_PRESETS = [
 
 /* ================= 상점: 브랜드 · 낚싯대 · 장비 (게임 속 가상 브랜드) ================= */
 const BRANDS = {
-  dina:   { name: '다이나',   col: '#3b7cf0', tag: '안정적인 올라운더' },
-  sinano: { name: '시나노',   col: '#22b88a', tag: '장거리 캐스팅 · 가벼움' },
-  gamak:  { name: '가마쿠츠', col: '#e8a020', tag: '하이엔드 · 파이팅 최강' }
+  dina:   { name: '해랑',     col: '#3b7cf0', tag: '안정적인 올라운더' },
+  sinano: { name: '윤슬',     col: '#22b88a', tag: '장거리 캐스팅 · 가벼움' },
+  gamak:  { name: '금비늘',   col: '#e8a020', tag: '하이엔드 · 파이팅 최강' }
 };
 const SLOTS = { rod: '낚싯대', reel: '릴', hat: '모자', top: '옷', vest: '구명조끼', boots: '신발' };   // 장착 슬롯
 /* rod: ease=파이팅 쉬움(0~.5) cast=캐스팅 거리 배수 | 장비: 색/모양 */
 const SHOP_ITEMS = [
   { id: 'rod0', slot: 'rod', brand: null, name: '입문 낚싯대', price: 0, lv: 1, ease: 0, cast: 1, desc: '기본 장비', cg: [.8, .2, .15], ca: [.1, .12, .14], cb: [.28, .3, .32] },
-  { id: 'rod_d1', slot: 'rod', brand: 'dina', name: '다이나 해풍 1호', price: 80000, lv: 3, ease: .08, cast: 1.02, desc: '튼튼한 입문 상위대', cg: [.2, .4, .9], ca: [.08, .14, .3], cb: [.2, .3, .6] },
-  { id: 'rod_s1', slot: 'rod', brand: 'sinano', name: '시나노 갯바위 1호', price: 120000, lv: 6, ease: .06, cast: 1.08, desc: '가볍고 멀리 던져요', cg: [.15, .7, .5], ca: [.08, .2, .18], cb: [.2, .5, .42] },
-  { id: 'rod_g1', slot: 'rod', brand: 'gamak', name: '가마쿠츠 마스터 1호', price: 250000, lv: 10, ease: .14, cast: 1, desc: '대물에도 버텨요', cg: [.9, .65, .15], ca: [.06, .06, .07], cb: [.22, .2, .14] },
-  { id: 'rod_d2', slot: 'rod', brand: 'dina', name: '다이나 인테그랄 1.25호', price: 280000, lv: 12, ease: .17, cast: 1.04, desc: '탄력 좋은 중급대', cg: [.2, .4, .9], ca: [.06, .12, .36], cb: [.25, .4, .75] },
-  { id: 'rod_s2', slot: 'rod', brand: 'sinano', name: '시나노 비스트 1.25호', price: 480000, lv: 16, ease: .14, cast: 1.15, desc: '원투에 강한 중급대', cg: [.15, .7, .5], ca: [.06, .24, .2], cb: [.25, .62, .5] },
-  { id: 'rod_d3', slot: 'rod', brand: 'dina', name: '다이나 소울 에이전트 1.5호', price: 950000, lv: 25, ease: .27, cast: 1.06, desc: '고급 올라운더', cg: [.2, .4, .9], ca: [.05, .1, .4], cb: [.3, .5, .9] },
-  { id: 'rod_s3', slot: 'rod', brand: 'sinano', name: '시나노 제로 1.5호', price: 1600000, lv: 30, ease: .22, cast: 1.25, desc: '최상급 원투 전용', cg: [.15, .7, .5], ca: [.05, .3, .26], cb: [.35, .85, .68] },
-  { id: 'rod_g2', slot: 'rod', brand: 'gamak', name: '가마쿠츠 로열 1.5호', price: 2200000, lv: 34, ease: .33, cast: 1.03, desc: '큰 고기도 지치지 않아요', cg: [.9, .65, .15], ca: [.05, .05, .06], cb: [.5, .38, .12] },
-  { id: 'rod_g3', slot: 'rod', brand: 'gamak', name: '가마쿠츠 레전드 2호', price: 4000000, lv: 40, ease: .45, cast: 1.05, desc: '전설의 파이팅 로드', cg: [1, .8, .2], ca: [.04, .04, .05], cb: [.85, .65, .2] },
+  { id: 'rod_d1', slot: 'rod', brand: 'dina', name: '해랑 해풍 1호', price: 80000, lv: 3, ease: .08, cast: 1.02, desc: '튼튼한 입문 상위대', cg: [.2, .4, .9], ca: [.08, .14, .3], cb: [.2, .3, .6] },
+  { id: 'rod_s1', slot: 'rod', brand: 'sinano', name: '윤슬 갯바위 1호', price: 120000, lv: 6, ease: .06, cast: 1.08, desc: '가볍고 멀리 던져요', cg: [.15, .7, .5], ca: [.08, .2, .18], cb: [.2, .5, .42] },
+  { id: 'rod_g1', slot: 'rod', brand: 'gamak', name: '금비늘 마스터 1호', price: 250000, lv: 10, ease: .14, cast: 1, desc: '대물에도 버텨요', cg: [.9, .65, .15], ca: [.06, .06, .07], cb: [.22, .2, .14] },
+  { id: 'rod_d2', slot: 'rod', brand: 'dina', name: '해랑 너울 1.25호', price: 280000, lv: 12, ease: .17, cast: 1.04, desc: '탄력 좋은 중급대', cg: [.2, .4, .9], ca: [.06, .12, .36], cb: [.25, .4, .75] },
+  { id: 'rod_s2', slot: 'rod', brand: 'sinano', name: '윤슬 질풍 1.25호', price: 480000, lv: 16, ease: .14, cast: 1.15, desc: '원투에 강한 중급대', cg: [.15, .7, .5], ca: [.06, .24, .2], cb: [.25, .62, .5] },
+  { id: 'rod_d3', slot: 'rod', brand: 'dina', name: '해랑 바람길 1.5호', price: 950000, lv: 25, ease: .27, cast: 1.06, desc: '고급 올라운더', cg: [.2, .4, .9], ca: [.05, .1, .4], cb: [.3, .5, .9] },
+  { id: 'rod_s3', slot: 'rod', brand: 'sinano', name: '윤슬 수평선 1.5호', price: 1600000, lv: 30, ease: .22, cast: 1.25, desc: '최상급 원투 전용', cg: [.15, .7, .5], ca: [.05, .3, .26], cb: [.35, .85, .68] },
+  { id: 'rod_g2', slot: 'rod', brand: 'gamak', name: '금비늘 로열 1.5호', price: 2200000, lv: 34, ease: .33, cast: 1.03, desc: '큰 고기도 지치지 않아요', cg: [.9, .65, .15], ca: [.05, .05, .06], cb: [.5, .38, .12] },
+  { id: 'rod_g3', slot: 'rod', brand: 'gamak', name: '금비늘 레전드 2호', price: 4000000, lv: 40, ease: .45, cast: 1.05, desc: '전설의 파이팅 로드', cg: [1, .8, .2], ca: [.04, .04, .05], cb: [.85, .65, .2] },
 
   { id: 'hat0', slot: 'hat', brand: null, name: '기본 캡', price: 0, lv: 1, c: [.96, .78, .22], style: 'cap', desc: '노란 캡 모자' },
-  { id: 'hat_d', slot: 'hat', brand: 'dina', name: '다이나 바이저 캡', price: 15000, lv: 2, c: [.12, .22, .6], style: 'cap', desc: '곤색 바이저 캡' },
-  { id: 'hat_s', slot: 'hat', brand: 'sinano', name: '시나노 버킷햇', price: 20000, lv: 5, c: [.12, .6, .5], style: 'bucket', desc: '챙이 둥근 버킷햇' },
-  { id: 'hat_g', slot: 'hat', brand: 'gamak', name: '가마쿠츠 와이드햇', price: 35000, lv: 9, c: [.1, .1, .12], style: 'wide', desc: '챙이 넓은 검정 모자' },
+  { id: 'hat_d', slot: 'hat', brand: 'dina', name: '해랑 바이저 캡', price: 15000, lv: 2, c: [.12, .22, .6], style: 'cap', desc: '곤색 바이저 캡' },
+  { id: 'hat_s', slot: 'hat', brand: 'sinano', name: '윤슬 버킷햇', price: 20000, lv: 5, c: [.12, .6, .5], style: 'bucket', desc: '챙이 둥근 버킷햇' },
+  { id: 'hat_g', slot: 'hat', brand: 'gamak', name: '금비늘 와이드햇', price: 35000, lv: 9, c: [.1, .1, .12], style: 'wide', desc: '챙이 넓은 검정 모자' },
 
   { id: 'top0', slot: 'top', brand: null, name: '기본 작업복', price: 0, lv: 1, c: [.28, .42, .56], p: [.17, .22, .3], desc: '파란 상하의' },
-  { id: 'top_d', slot: 'top', brand: 'dina', name: '다이나 윈드브레이커', price: 60000, lv: 4, c: [.14, .22, .62], p: [.1, .12, .22], desc: '방풍 상하의' },
-  { id: 'top_s', slot: 'top', brand: 'sinano', name: '시나노 방한 상하의', price: 90000, lv: 8, c: [.12, .6, .52], p: [.14, .17, .19], desc: '따뜻한 청록 방한복' },
-  { id: 'top_g', slot: 'top', brand: 'gamak', name: '가마쿠츠 프로 수트', price: 150000, lv: 13, c: [.13, .13, .15], p: [.2, .16, .1], desc: '검정+골드 프로 수트' },
+  { id: 'top_d', slot: 'top', brand: 'dina', name: '해랑 윈드브레이커', price: 60000, lv: 4, c: [.14, .22, .62], p: [.1, .12, .22], desc: '방풍 상하의' },
+  { id: 'top_s', slot: 'top', brand: 'sinano', name: '윤슬 방한 상하의', price: 90000, lv: 8, c: [.12, .6, .52], p: [.14, .17, .19], desc: '따뜻한 청록 방한복' },
+  { id: 'top_g', slot: 'top', brand: 'gamak', name: '금비늘 프로 수트', price: 150000, lv: 13, c: [.13, .13, .15], p: [.2, .16, .1], desc: '검정+골드 프로 수트' },
 
   { id: 'vest0', slot: 'vest', brand: null, name: '기본 구명조끼', price: 0, lv: 1, c: [.9, .42, .17], desc: '주황 구명조끼' },
-  { id: 'vest_d', slot: 'vest', brand: 'dina', name: '다이나 구명조끼', price: 40000, lv: 3, c: [.85, .12, .16], desc: '빨강 구명조끼' },
-  { id: 'vest_s', slot: 'vest', brand: 'sinano', name: '시나노 구명조끼', price: 55000, lv: 7, c: [.55, .8, .2], desc: '라임 구명조끼' },
-  { id: 'vest_g', slot: 'vest', brand: 'gamak', name: '가마쿠츠 구명조끼', price: 80000, lv: 11, c: [.95, .72, .1], desc: '골드 구명조끼' },
+  { id: 'vest_d', slot: 'vest', brand: 'dina', name: '해랑 구명조끼', price: 40000, lv: 3, c: [.85, .12, .16], desc: '빨강 구명조끼' },
+  { id: 'vest_s', slot: 'vest', brand: 'sinano', name: '윤슬 구명조끼', price: 55000, lv: 7, c: [.55, .8, .2], desc: '라임 구명조끼' },
+  { id: 'vest_g', slot: 'vest', brand: 'gamak', name: '금비늘 구명조끼', price: 80000, lv: 11, c: [.95, .72, .1], desc: '골드 구명조끼' },
 
   { id: 'boots0', slot: 'boots', brand: null, name: '기본 장화', price: 0, lv: 1, c: [.09, .1, .12], desc: '검정 장화' },
-  { id: 'boots_d', slot: 'boots', brand: 'dina', name: '다이나 갯바위 장화', price: 50000, lv: 5, c: [.1, .25, .62], desc: '파랑 갯바위 장화' },
-  { id: 'boots_s', slot: 'boots', brand: 'sinano', name: '시나노 펠트 장화', price: 70000, lv: 9, c: [.1, .42, .32], desc: '초록 펠트 장화' },
-  { id: 'boots_g', slot: 'boots', brand: 'gamak', name: '가마쿠츠 스파이크 부츠', price: 110000, lv: 14, c: [.28, .2, .06], desc: '골드 갈색 스파이크 부츠' }
+  { id: 'boots_d', slot: 'boots', brand: 'dina', name: '해랑 갯바위 장화', price: 50000, lv: 5, c: [.1, .25, .62], desc: '파랑 갯바위 장화' },
+  { id: 'boots_s', slot: 'boots', brand: 'sinano', name: '윤슬 펠트 장화', price: 70000, lv: 9, c: [.1, .42, .32], desc: '초록 펠트 장화' },
+  { id: 'boots_g', slot: 'boots', brand: 'gamak', name: '금비늘 스파이크 부츠', price: 110000, lv: 14, c: [.28, .2, .06], desc: '골드 갈색 스파이크 부츠' }
 ];
 const itemById = id => SHOP_ITEMS.find(x => x.id === id);
 
 
-/* ================= 릴 (다이나 · 시나노만) =================
+/* ================= 릴 (해랑 · 윤슬만) =================
    type: drag=일반 드랙릴 / lever=브레이크레버릴(Lv15~)   q: 드랙 품질 0~1 (소리 · 부드러움)   speed: 감기 속도 보너스 */
 SHOP_ITEMS.push(
   { id: 'reel0', slot: 'reel', brand: null, type: 'drag', name: '입문 릴', price: 0, lv: 1, q: .05, speed: 0, desc: '기본 드랙릴', c: [.5, .5, .55] },
-  { id: 'reel_d1', slot: 'reel', brand: 'dina', type: 'drag', name: '다이나 해풍 2500', price: 70000, lv: 4, q: .25, speed: .05, desc: '튼튼한 드랙릴', c: [.2, .4, .9] },
-  { id: 'reel_s1', slot: 'reel', brand: 'sinano', type: 'drag', name: '시나노 갯바위 2500', price: 90000, lv: 6, q: .3, speed: .05, desc: '가벼운 드랙릴', c: [.15, .7, .5] },
-  { id: 'reel_d2', slot: 'reel', brand: 'dina', type: 'drag', name: '다이나 인테그랄 3000', price: 220000, lv: 12, q: .5, speed: .1, desc: '부드러운 드랙', c: [.15, .3, .75] },
-  { id: 'reel_s2', slot: 'reel', brand: 'sinano', type: 'drag', name: '시나노 비스트 3000', price: 300000, lv: 14, q: .55, speed: .11, desc: '맑은 드랙음', c: [.1, .6, .45] },
-  { id: 'reel_dl1', slot: 'reel', brand: 'dina', type: 'lever', name: '다이나 레버 LB 소울', price: 450000, lv: 16, q: .6, speed: .14, desc: '브레이크 레버로 즉시 줄을 풀어줘요', c: [.3, .5, 1] },
-  { id: 'reel_sl1', slot: 'reel', brand: 'sinano', type: 'lever', name: '시나노 레버 LB 비스트', price: 650000, lv: 20, q: .7, speed: .15, desc: '정밀한 브레이크 레버', c: [.2, .8, .6] },
-  { id: 'reel_d3', slot: 'reel', brand: 'dina', type: 'drag', name: '다이나 소울 4000', price: 700000, lv: 26, q: .78, speed: .16, desc: '고급 드랙릴', c: [.1, .25, .85] },
-  { id: 'reel_dl2', slot: 'reel', brand: 'dina', type: 'lever', name: '다이나 레버 LB 소울 SP', price: 1400000, lv: 28, q: .85, speed: .2, desc: '고급 레버릴', c: [.4, .6, 1] },
-  { id: 'reel_s3', slot: 'reel', brand: 'sinano', type: 'drag', name: '시나노 제로 4000', price: 1100000, lv: 32, q: .9, speed: .18, desc: '카랑카랑한 최상급 드랙', c: [.1, .9, .65] },
-  { id: 'reel_sl2', slot: 'reel', brand: 'sinano', type: 'lever', name: '시나노 레버 LB 제로', price: 2600000, lv: 36, q: .97, speed: .26, desc: '최상급 레버릴', c: [.3, 1, .75] }
+  { id: 'reel_d1', slot: 'reel', brand: 'dina', type: 'drag', name: '해랑 해풍 2500', price: 70000, lv: 4, q: .25, speed: .05, desc: '튼튼한 드랙릴', c: [.2, .4, .9] },
+  { id: 'reel_s1', slot: 'reel', brand: 'sinano', type: 'drag', name: '윤슬 갯바위 2500', price: 90000, lv: 6, q: .3, speed: .05, desc: '가벼운 드랙릴', c: [.15, .7, .5] },
+  { id: 'reel_d2', slot: 'reel', brand: 'dina', type: 'drag', name: '해랑 너울 3000', price: 220000, lv: 12, q: .5, speed: .1, desc: '부드러운 드랙', c: [.15, .3, .75] },
+  { id: 'reel_s2', slot: 'reel', brand: 'sinano', type: 'drag', name: '윤슬 질풍 3000', price: 300000, lv: 14, q: .55, speed: .11, desc: '맑은 드랙음', c: [.1, .6, .45] },
+  { id: 'reel_dl1', slot: 'reel', brand: 'dina', type: 'lever', name: '해랑 레버 LB 바람길', price: 450000, lv: 16, q: .6, speed: .14, desc: '브레이크 레버로 즉시 줄을 풀어줘요', c: [.3, .5, 1] },
+  { id: 'reel_sl1', slot: 'reel', brand: 'sinano', type: 'lever', name: '윤슬 레버 LB 질풍', price: 650000, lv: 20, q: .7, speed: .15, desc: '정밀한 브레이크 레버', c: [.2, .8, .6] },
+  { id: 'reel_d3', slot: 'reel', brand: 'dina', type: 'drag', name: '해랑 바람길 4000', price: 700000, lv: 26, q: .78, speed: .16, desc: '고급 드랙릴', c: [.1, .25, .85] },
+  { id: 'reel_dl2', slot: 'reel', brand: 'dina', type: 'lever', name: '해랑 레버 LB 바람길 SP', price: 1400000, lv: 28, q: .85, speed: .2, desc: '고급 레버릴', c: [.4, .6, 1] },
+  { id: 'reel_s3', slot: 'reel', brand: 'sinano', type: 'drag', name: '윤슬 수평선 4000', price: 1100000, lv: 32, q: .9, speed: .18, desc: '카랑카랑한 최상급 드랙', c: [.1, .9, .65] },
+  { id: 'reel_sl2', slot: 'reel', brand: 'sinano', type: 'lever', name: '윤슬 레버 LB 수평선', price: 2600000, lv: 36, q: .97, speed: .26, desc: '최상급 레버릴', c: [.3, 1, .75] }
 );
 const LEVER_MIN_LV = 15;
 
 /* ================= 가방 · 태클박스 · 낚싯대 가방 (보유 중 가장 큰 용량이 자동 적용) ================= */
 SHOP_ITEMS.push(
-  { id: 'tbox_d1', slot: 'tbox', brand: 'dina', name: '다이나 소형 태클박스', price: 40000, lv: 2, cap: 24, desc: '채비 24개 보관' },
-  { id: 'tbox_s1', slot: 'tbox', brand: 'sinano', name: '시나노 중형 태클박스', price: 110000, lv: 8, cap: 40, desc: '채비 40개 보관' },
-  { id: 'tbox_d2', slot: 'tbox', brand: 'dina', name: '다이나 대형 태클박스', price: 300000, lv: 16, cap: 70, desc: '채비 70개 보관' },
-  { id: 'tbox_g1', slot: 'tbox', brand: 'gamak', name: '가마쿠츠 프로 태클박스', price: 800000, lv: 26, cap: 120, desc: '채비 120개 보관' },
-  { id: 'tbox_g2', slot: 'tbox', brand: 'gamak', name: '가마쿠츠 마스터 태클박스', price: 2000000, lv: 38, cap: 200, desc: '채비 200개 보관' },
-  { id: 'bag_d1', slot: 'bag', brand: 'dina', name: '다이나 숄더 낚시가방', price: 50000, lv: 3, cap: 14, desc: '밑밥 재료를 14개까지 담아요' },
-  { id: 'bag_s1', slot: 'bag', brand: 'sinano', name: '시나노 백팩 낚시가방', price: 140000, lv: 9, cap: 18, desc: '밑밥 재료 18개' },
-  { id: 'bag_g1', slot: 'bag', brand: 'gamak', name: '가마쿠츠 프로 낚시가방', price: 400000, lv: 20, cap: 24, desc: '밑밥 재료 24개' },
-  { id: 'bag_s2', slot: 'bag', brand: 'sinano', name: '시나노 하이엔드 낚시가방', price: 900000, lv: 30, cap: 30, desc: '밑밥 재료 30개' },
-  { id: 'case_d1', slot: 'case', brand: 'dina', name: '다이나 소프트 로드케이스', price: 35000, lv: 2, cap: 3, desc: '낚싯대 3개까지 보유' },
-  { id: 'case_s1', slot: 'case', brand: 'sinano', name: '시나노 로드케이스', price: 90000, lv: 8, cap: 4, desc: '낚싯대 4개 보유' },
-  { id: 'case_g1', slot: 'case', brand: 'gamak', name: '가마쿠츠 로드케이스', price: 260000, lv: 18, cap: 6, desc: '낚싯대 6개 보유' },
-  { id: 'case_d2', slot: 'case', brand: 'dina', name: '다이나 하드 로드케이스', price: 600000, lv: 28, cap: 8, desc: '낚싯대 8개 보유' },
-  { id: 'case_g2', slot: 'case', brand: 'gamak', name: '가마쿠츠 마스터 로드케이스', price: 1500000, lv: 38, cap: 12, desc: '낚싯대 12개 보유' }
+  { id: 'tbox_d1', slot: 'tbox', brand: 'dina', name: '해랑 소형 태클박스', price: 40000, lv: 2, cap: 24, desc: '채비 24개 보관' },
+  { id: 'tbox_s1', slot: 'tbox', brand: 'sinano', name: '윤슬 중형 태클박스', price: 110000, lv: 8, cap: 40, desc: '채비 40개 보관' },
+  { id: 'tbox_d2', slot: 'tbox', brand: 'dina', name: '해랑 대형 태클박스', price: 300000, lv: 16, cap: 70, desc: '채비 70개 보관' },
+  { id: 'tbox_g1', slot: 'tbox', brand: 'gamak', name: '금비늘 프로 태클박스', price: 800000, lv: 26, cap: 120, desc: '채비 120개 보관' },
+  { id: 'tbox_g2', slot: 'tbox', brand: 'gamak', name: '금비늘 마스터 태클박스', price: 2000000, lv: 38, cap: 200, desc: '채비 200개 보관' },
+  { id: 'bag_d1', slot: 'bag', brand: 'dina', name: '해랑 숄더 낚시가방', price: 50000, lv: 3, cap: 14, desc: '밑밥 재료를 14개까지 담아요' },
+  { id: 'bag_s1', slot: 'bag', brand: 'sinano', name: '윤슬 백팩 낚시가방', price: 140000, lv: 9, cap: 18, desc: '밑밥 재료 18개' },
+  { id: 'bag_g1', slot: 'bag', brand: 'gamak', name: '금비늘 프로 낚시가방', price: 400000, lv: 20, cap: 24, desc: '밑밥 재료 24개' },
+  { id: 'bag_s2', slot: 'bag', brand: 'sinano', name: '윤슬 하이엔드 낚시가방', price: 900000, lv: 30, cap: 30, desc: '밑밥 재료 30개' },
+  { id: 'case_d1', slot: 'case', brand: 'dina', name: '해랑 소프트 로드케이스', price: 35000, lv: 2, cap: 3, desc: '낚싯대 3개까지 보유' },
+  { id: 'case_s1', slot: 'case', brand: 'sinano', name: '윤슬 로드케이스', price: 90000, lv: 8, cap: 4, desc: '낚싯대 4개 보유' },
+  { id: 'case_g1', slot: 'case', brand: 'gamak', name: '금비늘 로드케이스', price: 260000, lv: 18, cap: 6, desc: '낚싯대 6개 보유' },
+  { id: 'case_d2', slot: 'case', brand: 'dina', name: '해랑 하드 로드케이스', price: 600000, lv: 28, cap: 8, desc: '낚싯대 8개 보유' },
+  { id: 'case_g2', slot: 'case', brand: 'gamak', name: '금비늘 마스터 로드케이스', price: 1500000, lv: 38, cap: 12, desc: '낚싯대 12개 보유' }
 );
 const BOX_BASE = { tbox: 12, bag: 10, case: 2 };
 const BOX_NAME = { tbox: '태클박스', bag: '낚시가방', case: '낚싯대 가방' };
@@ -1197,33 +1197,33 @@ const BOX_NAME = { tbox: '태클박스', bag: '낚시가방', case: '낚싯대 �
 const TACKLE_TYPE = { hook: '바늘', float: '찌', swivel: '도래', leader: '목줄', main: '원줄' };
 const TACKLE = [
   { id: 'hk0', type: 'hook', brand: null, name: '기본 바늘 #6', free: true, g: 0, desc: '기본형' },
-  { id: 'hk_d', type: 'hook', brand: 'dina', name: '다이나 감성돔 바늘 #5', price: 3000, pack: 5, lv: 2, g: 1, desc: '챔질이 조금 관대해요' },
-  { id: 'hk_s', type: 'hook', brand: 'sinano', name: '시나노 벵에돔 바늘 #6', price: 4500, pack: 5, lv: 8, g: 2, desc: '챔질 관대 · 바늘 빠짐 감소' },
-  { id: 'hk_g', type: 'hook', brand: 'gamak', name: '가마쿠츠 칸바리 #7', price: 9000, pack: 5, lv: 14, g: 3, desc: '걸리면 잘 안 빠져요' },
-  { id: 'hk_g2', type: 'hook', brand: 'gamak', name: '가마쿠츠 마스터 #7', price: 18000, pack: 5, lv: 28, g: 4, desc: '최고급 바늘' },
+  { id: 'hk_d', type: 'hook', brand: 'dina', name: '해랑 감성돔 바늘 #5', price: 3000, pack: 5, lv: 2, g: 1, desc: '챔질이 조금 관대해요' },
+  { id: 'hk_s', type: 'hook', brand: 'sinano', name: '윤슬 벵에돔 바늘 #6', price: 4500, pack: 5, lv: 8, g: 2, desc: '챔질 관대 · 바늘 빠짐 감소' },
+  { id: 'hk_g', type: 'hook', brand: 'gamak', name: '금비늘 강철 바늘 #7', price: 9000, pack: 5, lv: 14, g: 3, desc: '걸리면 잘 안 빠져요' },
+  { id: 'hk_g2', type: 'hook', brand: 'gamak', name: '금비늘 마스터 #7', price: 18000, pack: 5, lv: 28, g: 4, desc: '최고급 바늘' },
   { id: 'ld0', type: 'leader', brand: null, name: '기본 목줄 2호', free: true, str: 0, bite: 0, desc: '기본형' },
-  { id: 'ld_d15', type: 'leader', brand: 'dina', name: '다이나 목줄 1.5호', price: 2500, pack: 3, lv: 2, str: -.03, bite: .08, desc: '가늘어서 입질이 좋아요 · 약해요' },
-  { id: 'ld_d3', type: 'leader', brand: 'dina', name: '다이나 목줄 3호', price: 3500, pack: 3, lv: 5, str: .05, bite: -.06, desc: '조금 더 강해요' },
-  { id: 'ld_s4', type: 'leader', brand: 'sinano', name: '시나노 목줄 4호', price: 5000, pack: 3, lv: 12, str: .09, bite: -.12, desc: '대물용 · 입질은 줄어요' },
-  { id: 'ld_g5', type: 'leader', brand: 'gamak', name: '가마쿠츠 목줄 5호', price: 8000, pack: 3, lv: 20, str: .13, bite: -.18, desc: '초강력 · 입질은 더 줄어요' },
+  { id: 'ld_d15', type: 'leader', brand: 'dina', name: '해랑 목줄 1.5호', price: 2500, pack: 3, lv: 2, str: -.03, bite: .08, desc: '가늘어서 입질이 좋아요 · 약해요' },
+  { id: 'ld_d3', type: 'leader', brand: 'dina', name: '해랑 목줄 3호', price: 3500, pack: 3, lv: 5, str: .05, bite: -.06, desc: '조금 더 강해요' },
+  { id: 'ld_s4', type: 'leader', brand: 'sinano', name: '윤슬 목줄 4호', price: 5000, pack: 3, lv: 12, str: .09, bite: -.12, desc: '대물용 · 입질은 줄어요' },
+  { id: 'ld_g5', type: 'leader', brand: 'gamak', name: '금비늘 목줄 5호', price: 8000, pack: 3, lv: 20, str: .13, bite: -.18, desc: '초강력 · 입질은 더 줄어요' },
   { id: 'mn0', type: 'main', brand: null, name: '기본 원줄 2호', free: true, str: 0, cast: 0, desc: '기본형' },
-  { id: 'mn_s15', type: 'main', brand: 'sinano', name: '시나노 원줄 1.5호', price: 6000, pack: 1, lv: 4, str: -.03, cast: .04, desc: '가늘어서 멀리 날아가요' },
-  { id: 'mn_d25', type: 'main', brand: 'dina', name: '다이나 원줄 2.5호', price: 7000, pack: 1, lv: 6, str: .03, cast: 0, desc: '균형형' },
-  { id: 'mn_s3', type: 'main', brand: 'sinano', name: '시나노 원줄 3호', price: 9000, pack: 1, lv: 12, str: .06, cast: -.02, desc: '튼튼한 원줄' },
-  { id: 'mn_g5', type: 'main', brand: 'gamak', name: '가마쿠츠 원줄 5호', price: 16000, pack: 1, lv: 24, str: .12, cast: -.05, desc: '대물용 굵은 원줄' },
+  { id: 'mn_s15', type: 'main', brand: 'sinano', name: '윤슬 원줄 1.5호', price: 6000, pack: 1, lv: 4, str: -.03, cast: .04, desc: '가늘어서 멀리 날아가요' },
+  { id: 'mn_d25', type: 'main', brand: 'dina', name: '해랑 원줄 2.5호', price: 7000, pack: 1, lv: 6, str: .03, cast: 0, desc: '균형형' },
+  { id: 'mn_s3', type: 'main', brand: 'sinano', name: '윤슬 원줄 3호', price: 9000, pack: 1, lv: 12, str: .06, cast: -.02, desc: '튼튼한 원줄' },
+  { id: 'mn_g5', type: 'main', brand: 'gamak', name: '금비늘 원줄 5호', price: 16000, pack: 1, lv: 24, str: .12, cast: -.05, desc: '대물용 굵은 원줄' },
   { id: 'sw0', type: 'swivel', brand: null, name: '기본 도래', free: true, over: 0, desc: '기본형' },
-  { id: 'sw_d', type: 'swivel', brand: 'dina', name: '다이나 베어링 도래', price: 3500, pack: 5, lv: 5, over: .15, desc: '줄 꼬임 감소 · 과부하가 천천히 쌓여요' },
-  { id: 'sw_s', type: 'swivel', brand: 'sinano', name: '시나노 베어링 도래', price: 6000, pack: 5, lv: 13, over: .25, desc: '매끄럽게 돌아요' },
-  { id: 'sw_g', type: 'swivel', brand: 'gamak', name: '가마쿠츠 베어링 도래', price: 12000, pack: 5, lv: 25, over: .4, desc: '최고급 도래' },
+  { id: 'sw_d', type: 'swivel', brand: 'dina', name: '해랑 베어링 도래', price: 3500, pack: 5, lv: 5, over: .15, desc: '줄 꼬임 감소 · 과부하가 천천히 쌓여요' },
+  { id: 'sw_s', type: 'swivel', brand: 'sinano', name: '윤슬 베어링 도래', price: 6000, pack: 5, lv: 13, over: .25, desc: '매끄럽게 돌아요' },
+  { id: 'sw_g', type: 'swivel', brand: 'gamak', name: '금비늘 베어링 도래', price: 12000, pack: 5, lv: 25, over: .4, desc: '최고급 도래' },
   { id: 'fl_h0', type: 'float', brand: null, kind: 'hole', name: '구멍찌', free: true, dist: 1, vis: 1, desc: '기본 구멍찌' },
   { id: 'fl_s0', type: 'float', brand: null, kind: 'self', name: '자립 막대찌', free: true, dist: 1, vis: 1, desc: '기본 자립 막대찌' },
   { id: 'fl_n0', type: 'float', brand: null, kind: 'non', name: '비자립 막대찌', free: true, dist: 1, vis: 1, desc: '기본 비자립 막대찌' },
-  { id: 'fl_h_d', type: 'float', brand: 'dina', kind: 'hole', name: '다이나 구멍찌', price: 20000, pack: 1, lv: 4, dist: 1.04, vis: 1.12, desc: '시인성이 좋은 구멍찌' },
-  { id: 'fl_n_d', type: 'float', brand: 'dina', kind: 'non', name: '다이나 비자립 막대찌', price: 30000, pack: 1, lv: 8, dist: 1.05, vis: 1.15, desc: '입질이 또렷하게 보여요' },
-  { id: 'fl_s_d', type: 'float', brand: 'dina', kind: 'self', name: '다이나 자립 막대찌', price: 40000, pack: 1, lv: 9, dist: 1.1, vis: 1.05, desc: '멀리 날아가는 자립찌' },
-  { id: 'fl_h_s', type: 'float', brand: 'sinano', kind: 'hole', name: '시나노 구멍찌', price: 35000, pack: 1, lv: 10, dist: 1.1, vis: 1.1, desc: '원투가 좋은 구멍찌' },
-  { id: 'fl_s_g', type: 'float', brand: 'gamak', kind: 'self', name: '가마쿠츠 자립 막대찌', price: 60000, pack: 1, lv: 16, dist: 1.14, vis: 1.0, desc: '고급 자립찌' },
-  { id: 'fl_n_s', type: 'float', brand: 'sinano', kind: 'non', name: '시나노 비자립 막대찌', price: 55000, pack: 1, lv: 18, dist: 1.1, vis: 1.25, desc: '예민한 고급 비자립찌' }
+  { id: 'fl_h_d', type: 'float', brand: 'dina', kind: 'hole', name: '해랑 구멍찌', price: 20000, pack: 1, lv: 4, dist: 1.04, vis: 1.12, desc: '시인성이 좋은 구멍찌' },
+  { id: 'fl_n_d', type: 'float', brand: 'dina', kind: 'non', name: '해랑 비자립 막대찌', price: 30000, pack: 1, lv: 8, dist: 1.05, vis: 1.15, desc: '입질이 또렷하게 보여요' },
+  { id: 'fl_s_d', type: 'float', brand: 'dina', kind: 'self', name: '해랑 자립 막대찌', price: 40000, pack: 1, lv: 9, dist: 1.1, vis: 1.05, desc: '멀리 날아가는 자립찌' },
+  { id: 'fl_h_s', type: 'float', brand: 'sinano', kind: 'hole', name: '윤슬 구멍찌', price: 35000, pack: 1, lv: 10, dist: 1.1, vis: 1.1, desc: '원투가 좋은 구멍찌' },
+  { id: 'fl_s_g', type: 'float', brand: 'gamak', kind: 'self', name: '금비늘 자립 막대찌', price: 60000, pack: 1, lv: 16, dist: 1.14, vis: 1.0, desc: '고급 자립찌' },
+  { id: 'fl_n_s', type: 'float', brand: 'sinano', kind: 'non', name: '윤슬 비자립 막대찌', price: 55000, pack: 1, lv: 18, dist: 1.1, vis: 1.25, desc: '예민한 고급 비자립찌' }
 ];
 const tackleById = id => TACKLE.find(x => x.id === id);
 
@@ -2246,7 +2246,7 @@ function drawItem(x, it, kind, W, H) {
     x.strokeStyle = '#cfd6db'; x.lineWidth = 3; x.beginPath(); x.moveTo(cx - W * .3, 46); x.quadraticCurveTo(cx - W * .42, 66, cx - W * .12, 80); x.stroke();                    // 베일
     x.strokeStyle = '#2a323a'; x.lineWidth = 4; x.beginPath(); x.moveTo(cx + W * .28, 48); x.lineTo(cx + W * .44, 38); x.stroke(); x.fillStyle = br; x.beginPath(); x.arc(cx + W * .45, 36, 6, 0, 7); x.fill();   // 핸들
     if (lev) { x.fillStyle = '#e8c33a'; x.beginPath(); x.moveTo(cx - W * .24, 30); x.lineTo(cx - W * .42, 20); x.lineTo(cx - W * .4, 14); x.lineTo(cx - W * .16, 26); x.closePath(); x.fill(); x.strokeStyle = '#7a6410'; x.lineWidth = 1; x.stroke(); }
-    x.fillStyle = '#fff'; x.font = '700 9px sans-serif'; x.textAlign = 'center'; x.fillText(it.brand === 'dina' ? 'DINA' : it.brand === 'sinano' ? 'SINANO' : 'BASIC', cx, 54);
+    x.fillStyle = '#fff'; x.font = '700 9px sans-serif'; x.textAlign = 'center'; x.fillText(it.brand === 'dina' ? 'HAERANG' : it.brand === 'sinano' ? 'YUNSEUL' : 'BASIC', cx, 54, W * .55);
     return;
   }
   if (kind === 'hat') {
