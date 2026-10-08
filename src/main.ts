@@ -22,8 +22,12 @@ try {
 async function restore() {
   const st = S.Storage; if (!st?.getItem) return;
   await Promise.all(KEYS.map(async k => { try { const v = await st.getItem(k); if (v != null && localStorage.getItem(k) == null) localStorage.setItem(k, v); } catch (e) {} }));
-  const orig = localStorage.setItem.bind(localStorage);
-  localStorage.setItem = (k: string, v: string) => { orig(k, v); if (k.startsWith('jjinaksi.')) { try { st.setItem(k, v)?.catch?.(() => {}); } catch (e) {} } };
+  // localStorage.setItem = ... 은 메서드가 아니라 'setItem' 이라는 저장 항목이 돼버려요. 그래서 prototype 쪽을 감싸요.
+  const orig = Storage.prototype.setItem;
+  Storage.prototype.setItem = function (this: globalThis.Storage, k: string, v: string) {
+    orig.call(this, k, v);
+    if (this === localStorage && k.startsWith('jjinaksi.')) { try { st.setItem(k, v)?.catch?.(() => {}); } catch (e) {} }
+  };
 }
 
 /* 3) 리워드 광고: 미리 불러두기(preload) → 보여주기(show) → 끝까지 보면 true */
@@ -69,6 +73,7 @@ function track(name: string, props: any) {
 (window as any).AIT = { isToss: true, adGroupId: AD_GROUP, preloadAd, showAd, track };
 
 /* 4) 저장 기록 복원 후 게임 시작 */
-restore().finally(() => {
+// 저장소 응답이 늦어도 게임은 3초 안에 시작해요
+Promise.race([restore(), new Promise(r => setTimeout(r, 3000))]).finally(() => {
   const s = document.createElement('script'); s.src = './game.js'; document.body.appendChild(s);
 });

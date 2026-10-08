@@ -4,15 +4,16 @@
 - `index.html` : 게임 화면(UI) 마크업
 - `public/game.js` : 게임 전체 코드 (3D 엔진·낚시 로직·보상 시스템). 출시용이라 `TEST_MAXLEVEL=false` 로 만들어져 있어요 (처음엔 Lv1, 시작금 5만 원)
 - `src/main.ts` : 앱인토스 연결부 (폰트 번들, 저장소 동기화, 가로 화면, 리워드 광고)
-- `granite.config.ts` : 앱인토스 설정 (`appName`, `brand.displayName`, `brand.icon` 을 콘솔 값에 맞춰 수정)
+- `apps-in-toss.config.ts` : 앱인토스 설정 (SDK 3.x 형식). `appName` 을 콘솔에 등록한 영문 이름과 맞춰주세요. 표시 이름·아이콘·게임 유형은 콘솔에서 설정해요
+- `vite.config.ts` : `npm run dev` 때만 devtools(가짜 SDK + 패널)가 켜져요. 브라우저에서 광고·저장소를 흉내 내서 확인할 수 있어요
 
 ## 실행 순서
 ```bash
 npm install
 cp .env.example .env     # VITE_AD_GROUP_ID 에 콘솔에서 발급받은 리워드 광고 그룹 ID 입력 (비우면 테스트 광고)
-npm run dev              # 샌드박스 앱으로 확인
-npm run build            # dist/ 생성
-npx ait deploy           # 콘솔에 업로드 (.ait 번들)
+npm run dev              # 브라우저(devtools) 또는 샌드박스 앱으로 확인
+npm run build            # dist/ 생성 + fishing-game.ait 번들 생성
+npx ait deploy           # 콘솔에 업로드 (콘솔 API 키 필요)
 ```
 
 ## 보상 시스템 금액 바꾸기
@@ -25,7 +26,8 @@ npx ait deploy           # 콘솔에 업로드 (.ait 번들)
 | 광고 보상 | ₩10,000 / 하루 10회 / 연속 시청 20초 대기 |
 
 ## 출시 전 꼭 확인 (앱인토스 검수 체크리스트 기준)
-- [ ] 콘솔에서 앱 등록, 앱 아이콘, 리워드 광고 그룹 ID 발급 → `.env`, `granite.config.ts` 반영
+- [ ] 콘솔에서 앱 등록, 앱 아이콘, 리워드 광고 그룹 ID 발급 → `.env`, `apps-in-toss.config.ts` 반영
+- [ ] 콘솔 CORS(Origin 허용 목록)에 `https://fishing-game.web.tossmini.com`, `https://fishing-game.private-web.tossmini.com` 등록 (앱 이름이 바뀌면 주소도 바뀌어요)
 - [ ] 실제 기기 샌드박스에서 **가로 화면 전환**, 광고 노출·보상 지급, 저장 기록 복원 확인
 - [ ] 광고는 미리 불러둔(preload) 뒤 보여줘요 (`src/main.ts` 구현됨). 끝까지 본 경우에만 보상
 - [ ] 시작 화면에 자동 팝업(바텀시트) 없음 — 출석은 🎁 버튼/토스트로만 안내
