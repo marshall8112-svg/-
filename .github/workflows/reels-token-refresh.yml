@@ -1,0 +1,29 @@
+name: 인스타 토큰 연장
+
+# 장기 토큰은 60일이면 만료돼요. 매달 1일·15일에 연장해서 시크릿을 갈아끼워요.
+# 필요: 시크릿 GH_PAT (Fine-grained 토큰, 이 저장소에 "Secrets: Read and write" 권한)
+on:
+  schedule:
+    - cron: '23 1 1,15 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: 연장 후 시크릿 갱신
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then echo "::error::GH_PAT 시크릿이 없어요"; exit 1; fi
+          NEW=$(node promo/src/refresh-token.mjs)
+          echo "::add-mask::$NEW"
+          printf '%s' "$NEW" | gh secret set IG_ACCESS_TOKEN --repo "$GITHUB_REPOSITORY"

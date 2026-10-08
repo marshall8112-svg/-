@@ -1,0 +1,99 @@
+name: 릴스 승인 처리
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  issues: write
+  actions: write
+
+concurrency:
+  group: reels
+  cancel-in-progress: false
+
+env:
+  MEDIA_BRANCH: reels-media
+
+jobs:
+  handle:
+    # 저장소 주인이 reel-draft 이슈에 단 /approve, /reject, /regen 댓글만 처리
+    if: >-
+      !github.event.issue.pull_request &&
+      github.event.issue.state == 'open' &&
+      contains(github.event.issue.labels.*.name, 'reel-draft') &&
+      github.event.comment.author_association == 'OWNER' &&
+      (startsWith(github.event.comment.body, '/approve') || startsWith(github.event.comment.body, '/reject') || startsWith(github.event.comment.body, '/regen'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: promo
+    env:
+      GH_TOKEN: ${{ github.token }}
+      ISSUE: ${{ github.event.issue.number }}
+      COMMENT: ${{ github.event.comment.body }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: promo/package-lock.json
+
+      - run: npm ci
+
+      - name: 이슈 읽기
+        id: meta
+        run: |
+          gh issue view "$ISSUE" --json body -q .body > body.md
+          node src/issue.mjs parse body.md caption.txt
+
+      - name: 미디어 브랜치 준비
+        working-directory: .
+        run: |
+          git config --global user.name "reels-bot"
+          git config --global user.email "reels-bot@users.noreply.github.com"
+          git fetch origin "$MEDIA_BRANCH"
+          git worktree add media "origin/$MEDIA_BRANCH" && git -C media checkout -B "$MEDIA_BRANCH"
+
+      - name: 게시
+        if: startsWith(github.event.comment.body, '/approve')
+        id: publish
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          VIDEO_URL: ${{ steps.meta.outputs.video_url }}
+        run: node src/publish.mjs --video-url "$VIDEO_URL" --caption-file caption.txt
+
+      - name: 결과 기록
+        if: always() && steps.meta.outcome == 'success'
+        env:
+          ID: ${{ steps.meta.outputs.id }}
+          APP: ${{ steps.meta.outputs.app }}
+          PUBLISH: ${{ steps.publish.outcome }}
+          PERMALINK: ${{ steps.publish.outputs.permalink }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          case "$COMMENT" in
+            /approve*)
+              if [ "$PUBLISH" = success ]; then
+                node src/history.mjs ../media/history.json "$ID" "{\"status\":\"posted\",\"permalink\":\"$PERMALINK\"}"
+                gh issue comment "$ISSUE" --body "✅ 게시 완료: ${PERMALINK:-인스타 앱에서 확인}"
+                gh label create reel-posted --color 0E8A16 --description "인스타 게시됨" --force
+                gh issue edit "$ISSUE" --remove-label reel-draft --add-label reel-posted
+                gh issue close "$ISSUE"
+              else
+                gh issue comment "$ISSUE" --body "❌ 게시 실패 — 로그: $RUN_URL  (고친 뒤 다시 \`/approve\` 하면 재시도해요)"
+              fi ;;
+            /reject*)
+              node src/history.mjs ../media/history.json "$ID" '{"status":"rejected"}'
+              gh issue close "$ISSUE" --reason "not planned" --comment "🗑️ 버렸어요" ;;
+            /regen*)
+              node src/history.mjs ../media/history.json "$ID" '{"status":"rejected"}'
+              gh workflow run reels-generate.yml -f app="$APP"
+              gh issue close "$ISSUE" --reason "not planned" --comment "🔁 같은 앱으로 새 초안을 만들고 있어요" ;;
+          esac
+          cd ../media && git add -A && { git diff --cached --quiet || { git commit -qm "$ID: ${COMMENT%% *}" && git push -q origin "$MEDIA_BRANCH"; }; }

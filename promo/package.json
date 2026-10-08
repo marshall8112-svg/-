@@ -1,0 +1,15 @@
+{
+  "name": "miniapp-reels",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate": "node src/generate.mjs",
+    "publish-reel": "node src/publish.mjs",
+    "refresh-token": "node src/refresh-token.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.132.1",
+    "playwright": "^1.64.0",
+    "zod": "^4.6.5"
+  }
+}

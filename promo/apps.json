@@ -1,0 +1,62 @@
+{
+  "account": {
+    "handle": "@your_account",
+    "voice": "친구한테 웃긴 거 보여주듯 가볍고 짧게. 반말 OK, 과장 광고 문구 금지.",
+    "searchHint": "토스 앱에서 검색"
+  },
+  "apps": [
+    {
+      "id": "filmlike",
+      "enabled": true,
+      "name": "필름라이크",
+      "keyword": "필름라이크",
+      "tagline": "사진을 필름카메라 감성으로",
+      "description": "TODO: 실제 기능으로 고쳐주세요. 사진을 고르면 필름카메라로 찍은 듯한 색감·그레인·날짜 스탬프를 입혀주는 미니앱.",
+      "audience": "감성 사진 좋아하는 10~30대",
+      "emoji": "🎞️",
+      "theme": { "bg1": "#2b1d14", "bg2": "#8a5a3b", "accent": "#ffcf7a" },
+      "url": "",
+      "actions": []
+    },
+    {
+      "id": "hachanum",
+      "enabled": true,
+      "name": "하찮음측정기",
+      "keyword": "하찮음측정기",
+      "tagline": "나의 하찮음 지수를 측정해드림",
+      "description": "TODO: 실제 기능으로 고쳐주세요. 몇 가지 질문/입력으로 '하찮음 지수'를 재미로 측정해 결과 카드를 보여주는 미니앱.",
+      "audience": "밈·테스트 좋아하는 10~20대",
+      "emoji": "🐜",
+      "theme": { "bg1": "#101820", "bg2": "#3a4a5c", "accent": "#b8ff5c" },
+      "url": "",
+      "actions": []
+    },
+    {
+      "id": "amumal-gwansang",
+      "enabled": true,
+      "name": "아무말관상가",
+      "keyword": "아무말관상가",
+      "tagline": "아무말로 보는 관상",
+      "description": "TODO: 실제 기능으로 고쳐주세요. 얼굴 사진을 보고 그럴듯하지만 아무말인 관상 풀이를 해주는 재미용 미니앱.",
+      "audience": "운세·관상 콘텐츠 좋아하는 20~30대",
+      "emoji": "🔮",
+      "theme": { "bg1": "#1b1030", "bg2": "#5b2a86", "accent": "#ffd84d" },
+      "url": "",
+      "actions": []
+    },
+    {
+      "id": "fishing-game",
+      "enabled": false,
+      "name": "바다 찌낚시",
+      "keyword": "바다 찌낚시",
+      "tagline": "손맛 나는 3D 바다낚시",
+      "description": "3D 바다 찌낚시 게임. 찌가 들어가는 순간 챔질해서 물고기를 낚고, 장비를 업그레이드해 더 큰 어종에 도전한다. 출석·접속 보상 있음.",
+      "audience": "낚시·캐주얼 게임 좋아하는 20~50대",
+      "emoji": "🎣",
+      "theme": { "bg1": "#062a3a", "bg2": "#14596b", "accent": "#ffe066" },
+      "orientation": "landscape",
+      "url": "",
+      "actions": []
+    }
+  ]
+}

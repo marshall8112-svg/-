@@ -1,0 +1,132 @@
+name: 릴스 생성
+
+on:
+  schedule:
+    - cron: '17 0 * * *' # 매일 09:17 (KST)
+  workflow_dispatch:
+    inputs:
+      app:
+        description: '앱 id (비우면 자동 순환)'
+        required: false
+      template:
+        description: '템플릿 (empathy / demo / result_reveal / pov / challenge, 비우면 자동)'
+        required: false
+
+permissions:
+  contents: write
+  issues: write
+  pages: write
+
+concurrency:
+  group: reels
+  cancel-in-progress: false
+
+env:
+  MEDIA_BRANCH: reels-media
+  # 비우면 GitHub Pages 주소(https://<owner>.github.io/<repo>)를 씀. Settings → Pages → Branch: reels-media / (root)
+  MEDIA_BASE_URL: ${{ vars.MEDIA_BASE_URL }}
+
+jobs:
+  generate:
+    if: vars.REELS_PAUSED != 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: promo
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 미디어 브랜치 준비
+        working-directory: .
+        run: |
+          git config --global user.name "reels-bot"
+          git config --global user.email "reels-bot@users.noreply.github.com"
+          if git fetch origin "$MEDIA_BRANCH" 2>/dev/null; then
+            git worktree add media "origin/$MEDIA_BRANCH" && git -C media checkout -B "$MEDIA_BRANCH"
+          else
+            git worktree add --orphan -b "$MEDIA_BRANCH" media
+            touch media/.nojekyll
+            echo '[]' > media/history.json
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: promo/package-lock.json
+
+      - run: npm ci
+      - name: 브라우저·FFmpeg·폰트 설치
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-noto-cjk fonts-noto-color-emoji
+          npx playwright install --with-deps chromium
+
+      - name: 영상 생성
+        id: gen
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          STATE_DIR: ${{ github.workspace }}/media
+          INPUT_APP: ${{ inputs.app }}
+          INPUT_TEMPLATE: ${{ inputs.template }}
+        run: |
+          args=()
+          [ -n "$INPUT_APP" ] && args+=(--app "$INPUT_APP")
+          [ -n "$INPUT_TEMPLATE" ] && args+=(--template "$INPUT_TEMPLATE")
+          node src/generate.mjs "${args[@]}"
+
+      - name: 영상 올리기 (GitHub Pages)
+        id: media
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ID: ${{ steps.gen.outputs.id }}
+          DIR: ${{ steps.gen.outputs.dir }}
+        run: |
+          mkdir -p ../media/reels
+          cp "$DIR/reel.mp4" "../media/reels/$ID.mp4"
+          cp "$DIR/thumb.jpg" "../media/reels/$ID.jpg"
+          node src/history.mjs ../media/history.json "$ID" "$(node -e 'const m=require(process.argv[1]);console.log(JSON.stringify({app:m.app,template:m.template,hook:m.hook,status:"draft"}))' "$DIR/meta.json")"
+          (cd ../media && git add -A && git commit -qm "reel $ID" && git push -q origin "$MEDIA_BRANCH")
+          gh api -X POST "repos/$GITHUB_REPOSITORY/pages/builds" >/dev/null 2>&1 || true
+          MEDIA_BASE_URL="${MEDIA_BASE_URL:-https://$GITHUB_REPOSITORY_OWNER.github.io/${GITHUB_REPOSITORY#*/}}"
+          echo "video_url=$MEDIA_BASE_URL/reels/$ID.mp4" >> "$GITHUB_OUTPUT"
+          echo "thumb_url=$MEDIA_BASE_URL/reels/$ID.jpg" >> "$GITHUB_OUTPUT"
+
+      - name: Pages 배포 대기
+        env:
+          URL: ${{ steps.media.outputs.video_url }}
+        run: |
+          for i in $(seq 1 40); do
+            if curl -sfI "$URL" | grep -qi 'content-type: video/mp4'; then echo "ready: $URL"; exit 0; fi
+            sleep 15
+          done
+          echo "::error::$URL 이 열리지 않아요. Settings → Pages 에서 reels-media 브랜치를 배포하도록 설정했는지 확인하세요."
+          exit 1
+
+      - name: 승인 요청 이슈 만들기
+        if: vars.AUTO_PUBLISH != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ID: ${{ steps.gen.outputs.id }}
+          DIR: ${{ steps.gen.outputs.dir }}
+        run: |
+          gh label create reel-draft --color FBCA04 --description "릴스 승인 대기" --force
+          node src/issue.mjs body "$DIR/meta.json" "${{ steps.media.outputs.video_url }}" "${{ steps.media.outputs.thumb_url }}" > body.md
+          gh issue create --title "🎬 릴스 초안 $ID" --body-file body.md --label reel-draft --assignee "${{ github.repository_owner }}"
+
+      - name: 자동 게시
+        if: vars.AUTO_PUBLISH == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          ID: ${{ steps.gen.outputs.id }}
+          DIR: ${{ steps.gen.outputs.dir }}
+          VIDEO_URL: ${{ steps.media.outputs.video_url }}
+        run: |
+          node -e 'process.stdout.write(require(process.argv[1]).caption)' "$DIR/meta.json" > caption.txt
+          node src/publish.mjs --video-url "$VIDEO_URL" --caption-file caption.txt
+          LINK=$(grep '^permalink=' "$GITHUB_OUTPUT" | tail -1 | cut -d= -f2-)
+          node src/history.mjs ../media/history.json "$ID" "{\"status\":\"posted\",\"permalink\":\"$LINK\"}"
+          cd ../media && git add -A && git commit -qm "posted $ID" && git push -q origin "$MEDIA_BRANCH"
