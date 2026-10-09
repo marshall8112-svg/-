@@ -7,7 +7,6 @@
     "website": ""
   },
   "defaults": {
-    "ageRating": "전체",
     "memo": "미니앱 공장 자동 업로드"
   }
 }
