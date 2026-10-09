@@ -300,8 +300,9 @@ git add factory/apps/<slug> && git commit -m "Add <slug> mini app (<title>)" && 
      node src/generate.mjs --app <slug> --template <template> --plan plans/<slug>-<template>.json --url http://127.0.0.1:47xx/
    ```
    - FFmpeg 가 PATH 에도 `.tools`에도 없으면 `cd promo/.tools && npm i ffmpeg-static@5.2.0` (git 제외 폴더)
-   - 배경음악은 `promo/assets/bgm/`에서 무작위 (곡 옆 `.json`의 `start`초부터). 사용자가 준 곡을 쓰고,
-     인터넷에서 받은 음원은 쓰지 않는다.
+   - 배경음악은 `promo/assets/bgm/`의 곡 중 **릴스에 가장 적게 쓰인 곡**이 자동으로 골라진다 (곡 옆 `.json`의
+     `start`·`tempo`·`volume` 적용, 느린 곡은 빠르게). 새 곡은 `node src/bgm-analyze.mjs <폴더>`로 가져온다.
+     사용자가 준 곡만 쓰고, 인터넷에서 받은 음원은 쓰지 않는다.
    - 끝나면 미리보기 서버를 확실히 끈다 (백그라운드 작업을 멈춰도 node 가 남을 수 있다):
      PowerShell `Get-NetTCPConnection -State Listen -LocalPort 47xx | % { Stop-Process -Id $_.OwningProcess -Force }`
 4. 확인: `out/<id>/timeline.json`과 `meta.json`(`bgm`·`captured` 가 채워졌는지),
