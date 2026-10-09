@@ -14,7 +14,9 @@ const DRIFT = 1.1; // 배경을 10% 크게 찍어 천천히 이동
 const RADIUS = 46; // 앱 화면 모서리
 const IN = 0.38; // 자막 등장 시간
 const BADGE_W = 520; // 토스 미니앱 배지 폭(px). 원본 비율 그대로
-const BADGE_Y = 1530; // 마지막 화면에서 주요 메시지 아래
+// 인스타 릴스 화면 아래 ~20%는 계정명·캡션·해시태그가 덮는다 → 중요한 건 그 위에 둔다
+const BADGE_Y = 1300; // 마지막 화면에서 주요 메시지 아래 (아래 여백 ~450px)
+const CTA_LIFT = 260; // 마지막 화면 내용을 위로 올리는 정도
 const OUT = 0.22; // 자막 퇴장 시간
 const FONT_CSS = `@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@500;700;900&display=block');`;
 const FONT_STACK = `'Noto Sans KR', 'Noto Sans CJK KR', 'Apple SD Gothic Neo', 'WenQuanYi Zen Hei', sans-serif`;
@@ -44,14 +46,14 @@ function bgHtml(app) {
   );
 }
 
-// 폰 그림자 + 하단 계정명 (움직이지 않는 층)
+// 폰 그림자 + 계정명 (움직이지 않는 층). 계정명은 인스타 하단 캡션에 가리지 않게 폰 바로 위에
 function underHtml(account, slot) {
   const shadow = slot
     ? `<div style="position:absolute;left:${slot.x}px;top:${slot.y}px;width:${slot.w}px;height:${slot.h}px;border-radius:${RADIUS + 10}px;box-shadow:0 40px 90px rgba(0,0,0,.55),0 8px 24px rgba(0,0,0,.35)"></div>`
     : '';
   return page(
     `${shadow}
-     <div style="position:absolute;bottom:58px;width:100%;text-align:center;color:rgba(255,255,255,.6);font-size:32px;font-weight:700;letter-spacing:.5px">${esc(account.handle)}</div>`
+     <div style="position:absolute;top:${slot ? slot.y - 62 : 210}px;width:100%;text-align:center;color:rgba(255,255,255,.72);font-size:30px;font-weight:700;letter-spacing:.5px;text-shadow:0 2px 8px rgba(0,0,0,.35)">${esc(account.handle)}</div>`
   );
 }
 
@@ -97,7 +99,7 @@ function ctaHtml(plan, app, account) {
   const { bg1, bg2, accent } = app.theme;
   return page(
     `<div style="position:absolute;inset:0;background:linear-gradient(165deg,${bg1}f5,${bg2}f5)"></div>
-     <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;padding:0 80px">
+     <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;padding:0 80px ${CTA_LIFT}px">
       <div style="width:240px;height:240px;border-radius:64px;background:rgba(255,255,255,.12);display:grid;place-items:center;font-size:150px;box-shadow:0 20px 60px rgba(0,0,0,.3)">${app.emoji}</div>
       <div style="font-family:'Black Han Sans',${FONT_STACK};font-size:112px;margin-top:44px;letter-spacing:-1px">${esc(app.name)}</div>
       <div style="font-size:46px;font-weight:700;opacity:.82;margin-top:14px">${esc(app.tagline)}</div>
