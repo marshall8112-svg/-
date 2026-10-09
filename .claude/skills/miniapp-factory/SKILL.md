@@ -116,7 +116,8 @@ node scripts/check.mjs <slug>
    { "name": "screenshot-2", "actions": [{ "type": "click", "selector": "text=시작하기" }, { "type": "wait", "ms": 800 }] },
    { "name": "screenshot-3", "actions": [{ "type": "click", "selector": "text=시작하기" }, { "type": "click", "selector": "text=결과 보기" }] }]
   ```
-  `type`: `wait`(ms) · `click`(selector) · `fill`(selector, value) · `scroll`(y)
+  `type`: `wait`(ms) · `click`(selector) · `fill`(selector, value) · `scroll`(y) ·
+  `upload`(selector 생략 시 `input[type=file]`, file = 앱 폴더 기준 경로 — 예: `shots/sample.svg`)
 
 ## 5. 등록 이미지
 

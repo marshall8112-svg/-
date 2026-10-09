@@ -1,0 +1,83 @@
+{
+  "slug": "foot-love-test",
+  "appName": "foot-love-test",
+  "title": "발가락 연애 테스트",
+  "tagline": "발 모양으로 보는 연애 스타일",
+  "idea": "발 사진으로 성적 취향 파악하는 코믹 어플 (연애 스타일 테스트로 순화, 재미용)",
+  "color": "#FF7A59",
+  "emoji": "🦶",
+  "createdAt": "2026-10-09T03:58:00.084Z",
+  "shots": [
+    {
+      "actions": [],
+      "name": "screenshot-1"
+    },
+    {
+      "actions": [
+        {
+          "file": "shots/foot.svg",
+          "type": "upload"
+        },
+        {
+          "ms": 600,
+          "type": "wait"
+        }
+      ],
+      "name": "screenshot-2"
+    },
+    {
+      "actions": [
+        {
+          "file": "shots/foot.svg",
+          "type": "upload"
+        },
+        {
+          "selector": "text=둘째 발가락이 제일 길어요",
+          "type": "click"
+        },
+        {
+          "ms": 3200,
+          "type": "wait"
+        },
+        {
+          "selector": "text=결과 보기",
+          "type": "click"
+        },
+        {
+          "ms": 800,
+          "type": "wait"
+        }
+      ],
+      "name": "screenshot-3"
+    }
+  ],
+  "ads": {
+    "banner": "ait.v2.live.a1ea3b071ad04735",
+    "interstitial": "ait.v2.live.c3693704f7e04f0e",
+    "rewarded": "ait.v2.live.01f04ccaf9664d2b",
+    "reward": {
+      "name": "숨겨진 연애 비밀",
+      "amount": 1
+    }
+  },
+  "console": {
+    "workspaceId": 98097,
+    "miniAppId": 84445
+  },
+  "bundle": {
+    "deploymentId": "01a11ed2-d87a-7019-99ac-11cf0179761a",
+    "status": "CREATED",
+    "uploadedAt": "2026-10-09T04:01:47.976Z"
+  },
+  "steps": {
+    "scaffold": "done",
+    "build_app": "done",
+    "assets": "done",
+    "console_app": "done",
+    "ad_groups": "done",
+    "release_build": "done",
+    "upload": "done",
+    "ready_for_review": "done"
+  },
+  "updatedAt": "2026-10-09T04:02:05.109Z"
+}

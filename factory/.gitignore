@@ -4,3 +4,4 @@ apps/*/*.ait
 apps/*/.preview/
 profile.json
 package-lock.json
+apps/*/tsconfig.tsbuildinfo

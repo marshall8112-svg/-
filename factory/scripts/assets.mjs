@@ -65,6 +65,7 @@ try {
         else if (a.type === 'click') await p.click(a.selector, { timeout: 5000 });
         else if (a.type === 'fill') await p.fill(a.selector, a.value ?? '', { timeout: 5000 });
         else if (a.type === 'scroll') await p.mouse.wheel(0, a.y ?? 400);
+        else if (a.type === 'upload') await p.setInputFiles(a.selector ?? 'input[type=file]', path.join(dir, a.file), { timeout: 5000 });
       } catch (e) {
         console.warn(`  ${shot.name} 동작 실패 (${a.type} ${a.selector ?? ''}): ${e.message.split('\n')[0]}`);
       }
