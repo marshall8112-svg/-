@@ -84,7 +84,6 @@ jobs:
           IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
         run: |
-          MEDIA_BASE_URL="${MEDIA_BASE_URL:-https://$GITHUB_REPOSITORY_OWNER.github.io/${GITHUB_REPOSITORY#*/}}"
           gh label create reel-draft --color FBCA04 --description "릴스 승인 대기" --force
           for APP in $APPS; do
             MP4=$(ls -t "reels/$APP"/*.mp4 2>/dev/null | head -1)
@@ -97,10 +96,16 @@ jobs:
             cp "reels/$APP/$ID.jpg" "../media/reels/$ID.jpg"
             node src/history.mjs ../media/history.json "$ID" "$(node -e 'const m=require(process.argv[1]);console.log(JSON.stringify({app:m.app,template:m.template,hook:m.hook,status:"draft",trigger:"release"}))' "$PWD/$META")"
             (cd ../media && git add -A && { git diff --cached --quiet || git commit -qm "release reel $ID"; } && git push -q origin "$MEDIA_BRANCH")
-            gh api -X POST "repos/$GITHUB_REPOSITORY/pages/builds" >/dev/null 2>&1 || true
-            VIDEO_URL="$MEDIA_BASE_URL/reels/$ID.mp4"; THUMB_URL="$MEDIA_BASE_URL/reels/$ID.jpg"
-            for i in $(seq 1 40); do curl -sfI "$VIDEO_URL" | grep -qi 'content-type: video/mp4' && break; sleep 15; done
-            curl -sfI "$VIDEO_URL" | grep -qi 'content-type: video/mp4' || { echo "::error::$VIDEO_URL 이 열리지 않아요 (Settings → Pages 확인)"; exit 1; }
+            # 공개 영상 주소: MEDIA_BASE_URL(Pages 등)이 있으면 그것, 없으면 jsDelivr CDN (공개 저장소 파일, 커밋 고정·무료)
+            if [ -n "$MEDIA_BASE_URL" ]; then
+              gh api -X POST "repos/$GITHUB_REPOSITORY/pages/builds" >/dev/null 2>&1 || true
+              VIDEO_URL="$MEDIA_BASE_URL/reels/$ID.mp4"; THUMB_URL="$MEDIA_BASE_URL/reels/$ID.jpg"
+            else
+              CDN="https://cdn.jsdelivr.net/gh/$GITHUB_REPOSITORY@$GITHUB_SHA/promo/reels/$APP"
+              VIDEO_URL="$CDN/$ID.mp4"; THUMB_URL="$CDN/$ID.jpg"
+            fi
+            for i in $(seq 1 40); do curl -sfIL "$VIDEO_URL" | grep -qi 'content-type: video/mp4' && break; sleep 15; done
+            curl -sfIL "$VIDEO_URL" | grep -qi 'content-type: video/mp4' || { echo "::error::$VIDEO_URL 이 열리지 않아요"; exit 1; }
 
             if [ "$AUTO_PUBLISH" = true ]; then
               node -e 'process.stdout.write(require(process.argv[1]).caption)' "$PWD/$META" > caption.txt

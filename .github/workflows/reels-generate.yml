@@ -89,7 +89,8 @@ jobs:
           node src/history.mjs ../media/history.json "$ID" "$(node -e 'const m=require(process.argv[1]);console.log(JSON.stringify({app:m.app,template:m.template,hook:m.hook,status:"draft"}))' "$DIR/meta.json")"
           (cd ../media && git add -A && git commit -qm "reel $ID" && git push -q origin "$MEDIA_BRANCH")
           gh api -X POST "repos/$GITHUB_REPOSITORY/pages/builds" >/dev/null 2>&1 || true
-          MEDIA_BASE_URL="${MEDIA_BASE_URL:-https://$GITHUB_REPOSITORY_OWNER.github.io/${GITHUB_REPOSITORY#*/}}"
+          # MEDIA_BASE_URL(Pages 등)이 없으면 jsDelivr CDN 으로 (방금 푸시한 reels-media 커밋 고정)
+          MEDIA_BASE_URL="${MEDIA_BASE_URL:-https://cdn.jsdelivr.net/gh/$GITHUB_REPOSITORY@$(git -C ../media rev-parse HEAD)}"
           echo "video_url=$MEDIA_BASE_URL/reels/$ID.mp4" >> "$GITHUB_OUTPUT"
           echo "thumb_url=$MEDIA_BASE_URL/reels/$ID.jpg" >> "$GITHUB_OUTPUT"
 
@@ -98,10 +99,10 @@ jobs:
           URL: ${{ steps.media.outputs.video_url }}
         run: |
           for i in $(seq 1 40); do
-            if curl -sfI "$URL" | grep -qi 'content-type: video/mp4'; then echo "ready: $URL"; exit 0; fi
+            if curl -sfIL "$URL" | grep -qi 'content-type: video/mp4'; then echo "ready: $URL"; exit 0; fi
             sleep 15
           done
-          echo "::error::$URL 이 열리지 않아요. Settings → Pages 에서 reels-media 브랜치를 배포하도록 설정했는지 확인하세요."
+          echo "::error::$URL 이 열리지 않아요."
           exit 1
 
       - name: 승인 요청 이슈 만들기

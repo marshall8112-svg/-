@@ -38,7 +38,7 @@
 | Variable | `AUTO_PUBLISH` | 처음엔 만들지 않음 → 나중에 `true` |
 | Variable | `REELS_PAUSED` | 잠깐 멈추고 싶을 때 `true` |
 
-**Settings → Pages** 에서 Source를 **Deploy from a branch**로 두고, `reels-media` / `(root)`를 고릅니다. 인스타 서버가 영상을 가져가는 공개 주소로 씁니다.
+**영상 공개 주소**는 따로 설정할 필요가 없습니다. 저장소가 공개라서 jsDelivr CDN(`cdn.jsdelivr.net/gh/<저장소>@<커밋>/...`, 무료)으로 인스타가 영상을 가져갑니다. GitHub Pages 를 쓰고 싶으면 Pages 를 켠 뒤 저장소 변수 `MEDIA_BASE_URL`에 그 주소를 넣으세요.
 
 ### 4. 앱 정보 채우기 (`apps.json`)
 - `description`: **꼭 실제 기능으로 고쳐 주세요.** Claude는 여기 적힌 기능만 사용합니다.
