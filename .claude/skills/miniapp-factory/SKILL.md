@@ -300,8 +300,10 @@ git add factory/apps/<slug> && git commit -m "Add <slug> mini app (<title>)" && 
      node src/generate.mjs --app <slug> --template <template> --plan plans/<slug>-<template>.json --url http://127.0.0.1:47xx/
    ```
    - FFmpeg 가 PATH 에도 `.tools`에도 없으면 `cd promo/.tools && npm i ffmpeg-static@5.2.0` (git 제외 폴더)
-   - 배경음악은 `promo/assets/bgm/`에서 무작위. 분위기가 다른 곡이 필요하면
-     `node src/bgm-synth.mjs --name <이름> --bpm <80~130> --key <0~11>`로 자작곡을 만든다 (다운로드 음원 금지)
+   - 배경음악은 `promo/assets/bgm/`에서 무작위 (곡 옆 `.json`의 `start`초부터). 사용자가 준 곡을 쓰고,
+     인터넷에서 받은 음원은 쓰지 않는다.
+   - 끝나면 미리보기 서버를 확실히 끈다 (백그라운드 작업을 멈춰도 node 가 남을 수 있다):
+     PowerShell `Get-NetTCPConnection -State Listen -LocalPort 47xx | % { Stop-Process -Id $_.OwningProcess -Force }`
 4. 확인: `out/<id>/timeline.json`과 `meta.json`(`bgm`·`captured` 가 채워졌는지),
    FFmpeg 로 프레임 6~7장을 타일로 뽑아 Read 로 본다. 자막과 화면이 어긋나면 actions·seconds 를 고쳐 다시 만든다.
 5. vite preview 를 끈다. 완성 영상을 `promo/reels/<slug>/`에 복사해 GitHub 에도 올린다
