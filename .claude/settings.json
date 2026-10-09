@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node scripts/*)",
+      "Bash(npm install*)",
+      "Bash(npm run *)",
+      "Bash(npx playwright install chromium)",
+      "mcp__apps-in-toss-docs"
+    ],
+    "deny": [
+      "mcp__apps-in-toss-console__bundle_submit_review"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "mcp__apps-in-toss-console__.*",
+        "hooks": [{ "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard-console.mjs\"" }]
+      }
+    ]
+  }
+}

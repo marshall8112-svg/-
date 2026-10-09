@@ -6,6 +6,10 @@
       "oauth": {
         "clientId": "mcp-gateway"
       }
+    },
+    "apps-in-toss-docs": {
+      "type": "http",
+      "url": "https://developers-apps-in-toss.toss.im/~gitbook/mcp"
     }
   }
 }
