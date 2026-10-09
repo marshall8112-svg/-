@@ -316,8 +316,12 @@ git add factory/apps/<slug> && git commit -m "Add <slug> mini app (<title>)" && 
    (`.meta.json`은 출시 때 자동 게시 워크플로 `reels-release.yml`이 캡션·승인 이슈를 만들 때 쓴다)
    같은 앱 릴스를 다시 만들었으면 이전 파일은 지우고 최신 것만 남긴다.
    `promo/apps.json`·plans·reels 를 커밋·푸시하고, 영상은 `SendUserFile`로 사용자에게도 보낸다.
-   인스타 게시는 하지 않는다.
-6. 기록: `node scripts/status.mjs <slug> --set steps.reel=done`
+   인스타 게시는 하지 않는다 — **사용자가 카톡으로 받아 폰에서 직접 올린다.**
+6. **카톡으로 보내기** (푸시가 끝난 뒤): `cd promo && node src/kakao-msg.mjs reels/<slug>/<id>.mp4`
+   가 출력하는 JSON 배열의 각 문자열을 순서대로 `KakaotalkChat-MemoChat`(나에게 보내기, 200자 제한)으로 보낸다.
+   첫 메시지는 GitHub raw **다운로드 링크**(폰 브라우저에서 바로 저장됨), 다음은 캡션·해시태그.
+   카카오 도구가 세션에 없으면 보고에 "카톡 미전송 — 카카오 커넥터 연결 필요"라고 적는다.
+7. 기록: `node scripts/status.mjs <slug> --set steps.reel=done`
 
 ## 13. 마무리 보고 (여기서 멈춘다)
 
@@ -332,12 +336,12 @@ git add factory/apps/<slug> && git commit -m "Add <slug> mini app (<title>)" && 
   번들         <deploymentId> (CREATED, 버전 <versionName>)
   테스트 링크  <bundle_test_push 가 준 privateLink>
   앱 정보      콘솔 웹에 입력·임시저장 완료 (또는 로그인 대기 등 이유)
-  릴스         <초>초, 템플릿 <template> (나레이션·배경음악 여부)
+  릴스         <초>초, 템플릿 <template> · 카톡 전송 완료/미전송
 
 남은 일 (직접):
   1. 토스 앱에서 테스트 링크로 열어 광고가 뜨는지 확인
   2. 콘솔 → <title> → 앱 등록 화면에서 내용 확인 후 "검토 요청하기"
-  3. 릴스 캡션을 붙여 인스타에 게시
+  3. 카톡으로 받은 링크를 크롬/사파리로 열어 영상 저장 → 인스타 릴스로 캡션·해시태그 붙여 게시
 ```
 캡션(본문 + "👉 토스 앱에서 검색: <keyword>" + 해시태그)은 바로 붙여 넣을 수 있게 코드 블록으로 함께 준다.
 
