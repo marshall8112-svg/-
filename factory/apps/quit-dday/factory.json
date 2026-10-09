@@ -150,11 +150,11 @@
     "release_build": "done",
     "upload": "done",
     "github": "done",
-    "console_info": "todo",
+    "console_info": "done",
     "reel": "done",
-    "ready_for_review": "todo"
+    "ready_for_review": "done"
   },
-  "updatedAt": "2026-10-09T04:58:22.107Z",
+  "updatedAt": "2026-10-09T05:00:50.196Z",
   "listing": {
     "titleEn": "Quit Day Meter",
     "category": [
