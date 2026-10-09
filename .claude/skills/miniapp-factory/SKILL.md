@@ -219,6 +219,8 @@ node scripts/status.mjs <slug> --set bundle.status=CREATED steps.release_build=d
 
 ## 10. GitHub 푸시
 
+**GitHub 업로드는 사용자 요청 없이도 매번 한다.** 앱 코드·이미지는 여기서, 릴스 설정·영상은 12단계에서,
+공장 스크립트나 지시문을 고쳤으면 그때그때 커밋·푸시한다. 푸시가 실패하면(인증 등) 이유를 보고에 적는다.
 11단계 이미지 업로드가 GitHub 원본 주소를 쓰므로 **11단계 전에** 푸시한다. 저장소 루트에서:
 
 ```bash
@@ -301,8 +303,15 @@ git add factory/apps/<slug> && git commit -m "Add <slug> mini app (<title>)" && 
      `node src/bgm-synth.mjs --name <이름> --bpm <80~130> --key <0~11>`로 자작곡을 만든다 (다운로드 음원 금지)
 4. 확인: `out/<id>/timeline.json`과 `meta.json`(`narrated`·`bgm`·`captured` 가 모두 채워졌는지),
    FFmpeg 로 프레임 6~7장을 타일로 뽑아 Read 로 본다. 자막과 화면이 어긋나면 actions·seconds 를 고쳐 다시 만든다.
-5. vite preview 를 끄고 `promo/apps.json`·plans 를 커밋·푸시한다. 영상(`promo/out/`)은 git 제외라
-   `SendUserFile`로 사용자에게 보낸다. 인스타 게시는 하지 않는다.
+5. vite preview 를 끈다. 완성 영상을 `promo/reels/<slug>/`에 복사해 GitHub 에도 올린다
+   (`promo/out/`은 git 제외라 작업용, `promo/reels/`가 보관용):
+   ```bash
+   cd promo && mkdir -p reels/<slug> && cp out/<id>/reel.mp4 reels/<slug>/<id>.mp4 && cp out/<id>/thumb.jpg reels/<slug>/<id>.jpg \
+     && node -e "process.stdout.write(require('./out/<id>/meta.json').caption)" > reels/<slug>/<id>.caption.txt
+   ```
+   같은 앱 릴스를 다시 만들었으면 이전 파일은 지우고 최신 것만 남긴다.
+   `promo/apps.json`·plans·reels 를 커밋·푸시하고, 영상은 `SendUserFile`로 사용자에게도 보낸다.
+   인스타 게시는 하지 않는다.
 6. 기록: `node scripts/status.mjs <slug> --set steps.reel=done`
 
 ## 13. 마무리 보고 (여기서 멈춘다)
