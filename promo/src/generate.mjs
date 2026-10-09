@@ -43,7 +43,7 @@ const voiced = await synthesize(narrationLines(plan, app), outDir).catch((e) => 
   return null;
 });
 if (voiced) fitPlan(plan, voiced, { hookSec: HOOK_SEC, ctaSec: CTA_SEC });
-else console.log('  나레이션 없음 (Windows 한국어 음성에서만 지원)');
+else console.log("  나레이션 없음 (배경음악만, 켜려면 TTS_ENABLE=1)");
 
 const { items, total } = timeline(plan);
 const capture = await captureApp(app, outDir, total).catch((e) => {

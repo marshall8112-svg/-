@@ -68,7 +68,8 @@ async function wavSeconds(file) {
  * @returns {Promise<{file:string, seconds:number}[] | null>}
  */
 export async function synthesize(lines, outDir) {
-  if (process.platform !== 'win32' || process.env.TTS_DISABLE === '1') return null;
+  // 기본은 끔 (배경음악만). TTS_ENABLE=1 일 때만 나레이션을 넣는다.
+  if (process.platform !== 'win32' || process.env.TTS_ENABLE !== '1') return null;
   const dir = path.join(outDir, 'tts');
   await mkdir(dir, { recursive: true });
   const jobs = lines.map((text, i) => ({ text, file: path.join(dir, `raw_${i}.wav`) }));

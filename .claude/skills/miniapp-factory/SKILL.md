@@ -281,7 +281,8 @@ git add factory/apps/<slug> && git commit -m "Add <slug> mini app (<title>)" && 
 
 ## 12. 홍보 릴스
 
-저장소의 `promo/`에서 한다 (`promo/README.md`). 이 PC(Windows)에서 만들면 나레이션이 들어간다.
+저장소의 `promo/`에서 한다 (`promo/README.md`). **나레이션 없이 배경음악(`promo/assets/bgm/`)만** 깐다 — 사용자가 나레이션을 원할 때만 `TTS_ENABLE=1`.
+자막 문구는 짧고 리듬감 있게, 강조할 단어 1개만 `*별표*`(형광펜 표시)로. `theme.accent`는 흰 자막 카드 위 형광펜으로도 쓰이니 너무 연한 색은 피한다 (예: `#ffc94d`, `#ffd166`).
 
 1. `promo/apps.json`의 `apps`에 앱을 추가한다: id=`slug`, name·keyword=`title`, tagline,
    description(실제 기능만, Claude 기획이 이것만 쓴다), audience, emoji,
@@ -301,7 +302,7 @@ git add factory/apps/<slug> && git commit -m "Add <slug> mini app (<title>)" && 
    - FFmpeg 가 PATH 에도 `.tools`에도 없으면 `cd promo/.tools && npm i ffmpeg-static@5.2.0` (git 제외 폴더)
    - 배경음악은 `promo/assets/bgm/`에서 무작위. 분위기가 다른 곡이 필요하면
      `node src/bgm-synth.mjs --name <이름> --bpm <80~130> --key <0~11>`로 자작곡을 만든다 (다운로드 음원 금지)
-4. 확인: `out/<id>/timeline.json`과 `meta.json`(`narrated`·`bgm`·`captured` 가 모두 채워졌는지),
+4. 확인: `out/<id>/timeline.json`과 `meta.json`(`bgm`·`captured` 가 채워졌는지),
    FFmpeg 로 프레임 6~7장을 타일로 뽑아 Read 로 본다. 자막과 화면이 어긋나면 actions·seconds 를 고쳐 다시 만든다.
 5. vite preview 를 끈다. 완성 영상을 `promo/reels/<slug>/`에 복사해 GitHub 에도 올린다
    (`promo/out/`은 git 제외라 작업용, `promo/reels/`가 보관용):
