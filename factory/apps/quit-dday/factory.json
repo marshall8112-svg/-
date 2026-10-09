@@ -1,0 +1,155 @@
+{
+  "slug": "quit-dday",
+  "appName": "quit-dday",
+  "title": "퇴사 디데이 계산기",
+  "tagline": "질문 10개로 보는 내 퇴사 각",
+  "idea": "퇴사 D-day 계산기: 질문 10개에 답하면 퇴사 지수·예상 퇴사일·버티기 칭호를 알려주는 직장인 공감 테스트",
+  "color": "#1F8A70",
+  "emoji": "🚪",
+  "createdAt": "2026-10-09T04:49:33.992Z",
+  "shots": [
+    {
+      "name": "screenshot-1",
+      "actions": []
+    },
+    {
+      "name": "screenshot-2",
+      "actions": [
+        {
+          "type": "click",
+          "selector": "text=시작하기"
+        },
+        {
+          "type": "wait",
+          "ms": 500
+        }
+      ]
+    },
+    {
+      "name": "screenshot-3",
+      "actions": [
+        {
+          "type": "click",
+          "selector": "text=시작하기"
+        },
+        {
+          "type": "click",
+          "selector": ".option >> nth=3"
+        },
+        {
+          "type": "wait",
+          "ms": 150
+        },
+        {
+          "type": "click",
+          "selector": ".option >> nth=2"
+        },
+        {
+          "type": "wait",
+          "ms": 150
+        },
+        {
+          "type": "click",
+          "selector": ".option >> nth=3"
+        },
+        {
+          "type": "wait",
+          "ms": 150
+        },
+        {
+          "type": "click",
+          "selector": ".option >> nth=2"
+        },
+        {
+          "type": "wait",
+          "ms": 150
+        },
+        {
+          "type": "click",
+          "selector": ".option >> nth=3"
+        },
+        {
+          "type": "wait",
+          "ms": 150
+        },
+        {
+          "type": "click",
+          "selector": ".option >> nth=2"
+        },
+        {
+          "type": "wait",
+          "ms": 150
+        },
+        {
+          "type": "click",
+          "selector": ".option >> nth=3"
+        },
+        {
+          "type": "wait",
+          "ms": 150
+        },
+        {
+          "type": "click",
+          "selector": ".option >> nth=3"
+        },
+        {
+          "type": "wait",
+          "ms": 150
+        },
+        {
+          "type": "click",
+          "selector": ".option >> nth=2"
+        },
+        {
+          "type": "wait",
+          "ms": 150
+        },
+        {
+          "type": "click",
+          "selector": ".option >> nth=3"
+        },
+        {
+          "type": "wait",
+          "ms": 150
+        },
+        {
+          "type": "click",
+          "selector": "text=결과 보기"
+        },
+        {
+          "type": "wait",
+          "ms": 800
+        }
+      ]
+    }
+  ],
+  "ads": {
+    "banner": "ait.v2.live.c30451c1887d4896",
+    "interstitial": "ait.v2.live.2bfc1040a01f4f7b",
+    "rewarded": "ait.v2.live.1060260a59da4f74",
+    "reward": {
+      "name": "상사 대처 비법",
+      "amount": 1
+    }
+  },
+  "console": {
+    "workspaceId": 98097,
+    "miniAppId": 84465
+  },
+  "bundle": {
+    "deploymentId": "01a11f00-df57-7e2e-b9cb-757787e8505d",
+    "status": "CREATED",
+    "uploadedAt": "2026-10-09T04:52:03.210Z"
+  },
+  "steps": {
+    "scaffold": "done",
+    "build_app": "done",
+    "assets": "done",
+    "console_app": "done",
+    "ad_groups": "done",
+    "release_build": "done",
+    "upload": "done",
+    "ready_for_review": "done"
+  },
+  "updatedAt": "2026-10-09T04:53:09.327Z"
+}

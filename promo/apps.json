@@ -68,6 +68,38 @@
       ]
     },
     {
+      "id": "quit-dday",
+      "enabled": true,
+      "name": "퇴사 디데이 계산기",
+      "keyword": "퇴사 디데이 계산기",
+      "tagline": "질문 10개로 보는 내 퇴사 각",
+      "description": "직장인 공감 질문 10개(월요일 알람, 회의 중 표정, 퇴근 10분 전 업무 요청, 몰래 검색해 본 것 등)에 4지선다로 답하면 퇴사 지수(%), 예상 퇴사일(D-n), 칭호 5단계(회사가 집인 사람 / 존버 장인 / 이직 사이트 눈팅러 / 사직서 초안 작성자 / 퇴사 카운트다운 돌입), 월요병·번아웃·탈출 욕구 수치, 생존 팁을 보여준다. 광고 보고 상사 대처 비법 보기. 재미용.",
+      "audience": "회사 생활에 지친 20~40대 직장인",
+      "emoji": "🚪",
+      "theme": { "bg1": "#0c2b23", "bg2": "#1f8a70", "accent": "#ffd166" },
+      "url": "",
+      "actions": [
+        { "type": "wait", "ms": 2400 },
+        { "type": "click", "selector": "text=시작하기" },
+        { "type": "wait", "ms": 500 },
+        { "type": "click", "selector": ".option >> nth=3" }, { "type": "wait", "ms": 420 },
+        { "type": "click", "selector": ".option >> nth=2" }, { "type": "wait", "ms": 420 },
+        { "type": "click", "selector": ".option >> nth=3" }, { "type": "wait", "ms": 420 },
+        { "type": "click", "selector": ".option >> nth=2" }, { "type": "wait", "ms": 420 },
+        { "type": "click", "selector": ".option >> nth=3" }, { "type": "wait", "ms": 420 },
+        { "type": "click", "selector": ".option >> nth=2" }, { "type": "wait", "ms": 420 },
+        { "type": "click", "selector": ".option >> nth=3" }, { "type": "wait", "ms": 420 },
+        { "type": "click", "selector": ".option >> nth=3" }, { "type": "wait", "ms": 420 },
+        { "type": "click", "selector": ".option >> nth=2" }, { "type": "wait", "ms": 420 },
+        { "type": "click", "selector": ".option >> nth=3" },
+        { "type": "wait", "ms": 500 },
+        { "type": "click", "selector": "text=결과 보기" },
+        { "type": "wait", "ms": 3500 },
+        { "type": "scroll", "y": 420 },
+        { "type": "wait", "ms": 3000 }
+      ]
+    },
+    {
       "id": "fishing-game",
       "enabled": false,
       "name": "바다 찌낚시",

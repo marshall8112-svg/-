@@ -1,0 +1,99 @@
+:root {
+  --brand: #1F8A70;
+  --bg: #ffffff;
+  --text: #191f28;
+  --sub: #6b7684;
+  --line: #e5e8eb;
+  --radius: 16px;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #17171c;
+    --text: #f2f4f6;
+    --sub: #9ea6b1;
+    --line: #2c2c35;
+  }
+}
+* { box-sizing: border-box; }
+html, body, #root { margin: 0; min-height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Pretendard', 'Noto Sans KR', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all;
+}
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 100dvh;
+  padding: 24px 20px calc(96px + env(safe-area-inset-bottom));
+}
+.title { font-size: 26px; font-weight: 700; line-height: 1.35; margin: 8px 0 0; }
+.body { font-size: 17px; line-height: 1.6; color: var(--sub); margin: 0; }
+.card { border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; }
+.btn {
+  appearance: none;
+  border: 0;
+  border-radius: 14px;
+  min-height: 56px;
+  width: 100%;
+  font-size: 17px;
+  font-weight: 600;
+  background: var(--brand);
+  color: #fff;
+  cursor: pointer;
+}
+.btn:disabled { opacity: 0.5; }
+.btn-secondary { background: transparent; color: var(--brand); border: 1px solid var(--brand); }
+.bottom {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 12px 20px calc(12px + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--bg) 70%, transparent);
+}
+.ad-banner { width: 100%; min-height: 0; }
+
+.hero { font-size: 88px; text-align: center; margin-top: 24px; }
+.eyebrow { font-size: 15px; color: var(--sub); margin: 8px 0 0; text-align: center; }
+.center { align-items: center; text-align: center; justify-content: center; }
+.center-text { text-align: center; }
+.note { font-size: 15px; color: var(--sub); text-align: center; margin: 0; }
+.card .body + .body { margin-top: 8px; }
+.card-title { font-size: 18px; font-weight: 700; margin: 0 0 12px; }
+.highlight { border-color: var(--brand); }
+.options { display: flex; flex-direction: column; gap: 10px; }
+.option {
+  appearance: none; text-align: left; cursor: pointer;
+  background: transparent; color: var(--text);
+  border: 1px solid var(--line); border-radius: 14px;
+  min-height: 56px; padding: 14px 16px; font-size: 17px; font-weight: 600;
+}
+.option:active { border-color: var(--brand); background: color-mix(in srgb, var(--brand) 8%, transparent); }
+.link-btn { appearance: none; border: 0; background: none; color: var(--sub); font-size: 15px; min-height: 44px; cursor: pointer; align-self: flex-start; }
+.progress-row { display: flex; align-items: center; gap: 12px; }
+.progress { flex: 1; height: 8px; border-radius: 4px; background: var(--line); overflow: hidden; }
+.progress-fill { height: 100%; background: var(--brand); border-radius: 4px; transition: width .25s; }
+.progress-text { font-size: 15px; color: var(--sub); font-variant-numeric: tabular-nums; }
+.gauge {
+  --p: 0; align-self: center; width: 180px; height: 180px; border-radius: 50%;
+  background: conic-gradient(var(--brand) calc(var(--p) * 1%), var(--line) 0);
+  display: grid; place-items: center; position: relative;
+}
+.gauge::before { content: ''; position: absolute; inset: 16px; border-radius: 50%; background: var(--bg); }
+.gauge-value { position: relative; font-size: 44px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.gauge-value small { font-size: 22px; margin-left: 2px; }
+.dday { display: flex; flex-direction: column; align-items: center; gap: 4px; border-color: var(--brand); }
+.dday-label { font-size: 15px; color: var(--sub); }
+.dday-num { font-size: 36px; color: var(--brand); font-variant-numeric: tabular-nums; }
+.dday-date { font-size: 16px; }
+.stat + .stat { margin-top: 12px; }
+.stat-row { display: flex; justify-content: space-between; font-size: 16px; margin-bottom: 6px; }
+.bar { height: 10px; border-radius: 5px; background: var(--line); overflow: hidden; }
+.bar-fill { height: 100%; background: var(--brand); border-radius: 5px; }
+.tip { margin: 14px 0 0; font-size: 15px; color: var(--sub); }
+.bottom.row { display: flex; gap: 8px; }
