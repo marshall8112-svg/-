@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400">
+  <rect width="600" height="400" fill="#FFE9DF"/>
+  <circle cx="80" cy="70" r="40" fill="#FFD3C2"/>
+  <circle cx="530" cy="340" r="60" fill="#FFD3C2"/>
+  <!-- 발바닥 -->
+  <path d="M215 360 C150 330 160 230 205 190 C235 160 250 130 300 125 C380 120 410 170 405 225 C400 290 360 300 340 340 C320 380 260 385 215 360 Z" fill="#F6C4A4" stroke="#C9845F" stroke-width="5"/>
+  <!-- 발가락 -->
+  <ellipse cx="225" cy="120" rx="38" ry="46" fill="#F6C4A4" stroke="#C9845F" stroke-width="5"/>
+  <ellipse cx="290" cy="88" rx="27" ry="34" fill="#F6C4A4" stroke="#C9845F" stroke-width="5"/>
+  <ellipse cx="340" cy="98" rx="23" ry="28" fill="#F6C4A4" stroke="#C9845F" stroke-width="5"/>
+  <ellipse cx="380" cy="122" rx="20" ry="24" fill="#F6C4A4" stroke="#C9845F" stroke-width="5"/>
+  <ellipse cx="410" cy="155" rx="17" ry="20" fill="#F6C4A4" stroke="#C9845F" stroke-width="5"/>
+  <!-- 발톱 -->
+  <ellipse cx="225" cy="100" rx="18" ry="16" fill="#FF8F70"/>
+  <ellipse cx="290" cy="74" rx="12" ry="11" fill="#FF8F70"/>
+  <ellipse cx="340" cy="86" rx="10" ry="9" fill="#FF8F70"/>
+  <ellipse cx="380" cy="112" rx="9" ry="8" fill="#FF8F70"/>
+  <ellipse cx="410" cy="147" rx="7" ry="6" fill="#FF8F70"/>
+  <!-- 하트 -->
+  <path d="M470 80 c0 -18 24 -18 24 0 c0 -18 24 -18 24 0 c0 20 -24 30 -24 40 c0 -10 -24 -20 -24 -40 Z" fill="#FF7A59"/>
+</svg>

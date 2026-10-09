@@ -10,7 +10,7 @@ import { renderReel, timeline } from './render.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const { values: opt } = parseArgs({
-  options: { app: { type: 'string' }, template: { type: 'string' }, plan: { type: 'string' }, out: { type: 'string' } }
+  options: { app: { type: 'string' }, template: { type: 'string' }, plan: { type: 'string' }, out: { type: 'string' }, url: { type: 'string' } }
 });
 
 const config = JSON.parse(await readFile(path.join(ROOT, 'apps.json'), 'utf8'));
@@ -23,6 +23,7 @@ const apps = config.apps.filter((a) => a.enabled);
 if (!apps.length) throw new Error('apps.json 에 enabled 앱이 없어요');
 const app = opt.app ? config.apps.find((a) => a.id === opt.app) : [...apps].sort((a, b) => lastUsed((h) => h.app === a.id) - lastUsed((h) => h.app === b.id))[0];
 if (!app) throw new Error(`앱을 찾을 수 없어요: ${opt.app}`);
+if (opt.url) app.url = opt.url; // 로컬 빌드 등 임시 주소로 녹화할 때
 const template = opt.template || Object.keys(TEMPLATES).sort((a, b) => lastUsed((h) => h.app === app.id && h.template === a) - lastUsed((h) => h.app === app.id && h.template === b))[0];
 
 const id = `${new Date().toISOString().slice(0, 10)}-${app.id}-${Date.now().toString(36).slice(-4)}`;

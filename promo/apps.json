@@ -45,6 +45,29 @@
       "actions": []
     },
     {
+      "id": "foot-love-test",
+      "enabled": true,
+      "name": "발가락 연애 테스트",
+      "keyword": "발가락 연애 테스트",
+      "tagline": "발 모양으로 보는 연애 스타일",
+      "description": "발 사진을 올리고 발가락 모양(엄지가 제일 김=이집트형 / 둘째가 제일 김=그리스형 / 앞쪽이 비슷=로마형)을 고르면, 재미용 연애 스타일 결과를 보여준다. 결과: 연애 별명(예: 사랑의 마라톤 완주자, 밀당 파라오), 연애 능력치(밀당력·직진력·질투 지수·발냄새 관용도), 찰떡궁합 발 유형, 광고 보고 숨겨진 연애 비밀 보기. 사진은 휴대폰 밖으로 안 나감. 과학적 근거 없는 재미용.",
+      "audience": "심리테스트·연애 밈 좋아하는 10~30대",
+      "emoji": "🦶",
+      "theme": { "bg1": "#3a1408", "bg2": "#c4502f", "accent": "#ffd3c2" },
+      "url": "",
+      "actions": [
+        { "type": "wait", "ms": 2400 },
+        { "type": "upload", "selector": "input[type=file]", "file": "assets/samples/foot.svg" },
+        { "type": "wait", "ms": 2200 },
+        { "type": "click", "selector": "text=둘째 발가락이 제일 길어요" },
+        { "type": "wait", "ms": 3200 },
+        { "type": "click", "selector": "text=결과 보기" },
+        { "type": "wait", "ms": 3000 },
+        { "type": "scroll", "y": 500 },
+        { "type": "wait", "ms": 2000 }
+      ]
+    },
+    {
       "id": "fishing-game",
       "enabled": false,
       "name": "바다 찌낚시",
