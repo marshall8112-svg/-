@@ -1,0 +1,115 @@
+name: 출시 릴스 게시
+
+# 미니앱이 토스에 출시되면 미리 만들어 둔 릴스(promo/reels/<앱>/)를 인스타에 올린다.
+# 출시 감지는 PC 의 Claude 예약 작업이 콘솔 MCP 로 확인하고 promo/released/<앱> 파일을 푸시하는 것으로 알린다.
+# (GitHub 는 콘솔에 접근할 수 없어서 출시 여부를 직접 알 수 없다)
+on:
+  push:
+    paths:
+      - 'promo/released/**'
+  workflow_dispatch:
+    inputs:
+      app:
+        description: '앱 id (promo/reels/<id>/ 의 최신 릴스를 올림)'
+        required: true
+
+permissions:
+  contents: write
+  issues: write
+  pages: write
+
+concurrency:
+  group: reels
+  cancel-in-progress: false
+
+env:
+  MEDIA_BRANCH: reels-media
+  MEDIA_BASE_URL: ${{ vars.MEDIA_BASE_URL }}
+
+jobs:
+  release:
+    if: vars.REELS_PAUSED != 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: promo
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: 어떤 앱인지 찾기
+        id: which
+        env:
+          INPUT_APP: ${{ inputs.app }}
+        run: |
+          if [ -n "$INPUT_APP" ]; then APPS="$INPUT_APP"
+          else APPS=$(git diff --name-only --diff-filter=A HEAD~1 HEAD -- released/ | xargs -r -n1 basename | tr '\n' ' ')
+          fi
+          [ -z "$APPS" ] && { echo "새로 출시된 앱이 없어요"; exit 0; }
+          echo "apps=$APPS" >> "$GITHUB_OUTPUT"
+          echo "출시된 앱: $APPS"
+
+      - name: 미디어 브랜치 준비
+        if: steps.which.outputs.apps
+        working-directory: .
+        run: |
+          git config --global user.name "reels-bot"
+          git config --global user.email "reels-bot@users.noreply.github.com"
+          if git fetch origin "$MEDIA_BRANCH" 2>/dev/null; then
+            git worktree add media "origin/$MEDIA_BRANCH" && git -C media checkout -B "$MEDIA_BRANCH"
+          else
+            git worktree add --orphan -b "$MEDIA_BRANCH" media
+            touch media/.nojekyll
+            echo '[]' > media/history.json
+          fi
+
+      - uses: actions/setup-node@v4
+        if: steps.which.outputs.apps
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: promo/package-lock.json
+
+      - run: npm ci
+        if: steps.which.outputs.apps
+
+      - name: 릴스 올리기 (Pages → 승인 이슈 또는 바로 게시)
+        if: steps.which.outputs.apps
+        env:
+          GH_TOKEN: ${{ github.token }}
+          APPS: ${{ steps.which.outputs.apps }}
+          AUTO_PUBLISH: ${{ vars.AUTO_PUBLISH }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+        run: |
+          MEDIA_BASE_URL="${MEDIA_BASE_URL:-https://$GITHUB_REPOSITORY_OWNER.github.io/${GITHUB_REPOSITORY#*/}}"
+          gh label create reel-draft --color FBCA04 --description "릴스 승인 대기" --force
+          for APP in $APPS; do
+            MP4=$(ls -t "reels/$APP"/*.mp4 2>/dev/null | head -1)
+            [ -z "$MP4" ] && { echo "::warning::reels/$APP 에 릴스가 없어요"; continue; }
+            ID=$(basename "$MP4" .mp4)
+            META="reels/$APP/$ID.meta.json"
+            [ -f "$META" ] || { echo "::warning::$META 가 없어요"; continue; }
+            mkdir -p ../media/reels
+            cp "$MP4" "../media/reels/$ID.mp4"
+            cp "reels/$APP/$ID.jpg" "../media/reels/$ID.jpg"
+            node src/history.mjs ../media/history.json "$ID" "$(node -e 'const m=require(process.argv[1]);console.log(JSON.stringify({app:m.app,template:m.template,hook:m.hook,status:"draft",trigger:"release"}))' "$PWD/$META")"
+            (cd ../media && git add -A && { git diff --cached --quiet || git commit -qm "release reel $ID"; } && git push -q origin "$MEDIA_BRANCH")
+            gh api -X POST "repos/$GITHUB_REPOSITORY/pages/builds" >/dev/null 2>&1 || true
+            VIDEO_URL="$MEDIA_BASE_URL/reels/$ID.mp4"; THUMB_URL="$MEDIA_BASE_URL/reels/$ID.jpg"
+            for i in $(seq 1 40); do curl -sfI "$VIDEO_URL" | grep -qi 'content-type: video/mp4' && break; sleep 15; done
+            curl -sfI "$VIDEO_URL" | grep -qi 'content-type: video/mp4' || { echo "::error::$VIDEO_URL 이 열리지 않아요 (Settings → Pages 확인)"; exit 1; }
+
+            if [ "$AUTO_PUBLISH" = true ]; then
+              node -e 'process.stdout.write(require(process.argv[1]).caption)' "$PWD/$META" > caption.txt
+              node src/publish.mjs --video-url "$VIDEO_URL" --caption-file caption.txt
+              LINK=$(grep '^permalink=' "$GITHUB_OUTPUT" | tail -1 | cut -d= -f2-)
+              node src/history.mjs ../media/history.json "$ID" "{\"status\":\"posted\",\"permalink\":\"$LINK\"}"
+              (cd ../media && git add -A && git commit -qm "posted $ID" && git push -q origin "$MEDIA_BRANCH")
+            else
+              node src/issue.mjs body "$META" "$VIDEO_URL" "$THUMB_URL" > body.md
+              gh issue create --title "🚀 출시 릴스 $ID" --body-file body.md --label reel-draft --assignee "${{ github.repository_owner }}"
+            fi
+          done

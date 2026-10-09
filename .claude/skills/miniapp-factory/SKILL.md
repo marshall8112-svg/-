@@ -307,8 +307,10 @@ git add factory/apps/<slug> && git commit -m "Add <slug> mini app (<title>)" && 
    (`promo/out/`은 git 제외라 작업용, `promo/reels/`가 보관용):
    ```bash
    cd promo && mkdir -p reels/<slug> && cp out/<id>/reel.mp4 reels/<slug>/<id>.mp4 && cp out/<id>/thumb.jpg reels/<slug>/<id>.jpg \
+     && cp out/<id>/meta.json reels/<slug>/<id>.meta.json \
      && node -e "process.stdout.write(require('./out/<id>/meta.json').caption)" > reels/<slug>/<id>.caption.txt
    ```
+   (`.meta.json`은 출시 때 자동 게시 워크플로 `reels-release.yml`이 캡션·승인 이슈를 만들 때 쓴다)
    같은 앱 릴스를 다시 만들었으면 이전 파일은 지우고 최신 것만 남긴다.
    `promo/apps.json`·plans·reels 를 커밋·푸시하고, 영상은 `SendUserFile`로 사용자에게도 보낸다.
    인스타 게시는 하지 않는다.
