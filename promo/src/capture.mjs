@@ -34,6 +34,26 @@ async function runAction(page, a) {
       return page.setInputFiles(a.selector, a.file);
     case 'scroll':
       return page.mouse.wheel(0, a.y ?? 400);
+    case 'waitFn':
+      // 페이지 안의 조건(JS 식)이 참이 될 때까지 기다린다. 예: 게임 상태 "G.mode === 'bite'"
+      return page.waitForFunction(a.fn, null, { timeout: a.ms ?? 60000, polling: 40 });
+    case 'clickIf':
+      // 조건이 참일 때만 누른다
+      if (await page.evaluate(a.fn)) await page.click(a.selector, { timeout: 5000 });
+      return;
+    case 'pulseUntil': {
+      // 버튼을 눌렀다 뗐다 반복 (누르고 있기 조작), 조건이 참이 되면 멈춘다
+      const box = await page.locator(a.selector).boundingBox();
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      const until = Date.now() + (a.ms ?? 60000);
+      while (Date.now() < until && !(await page.evaluate(a.fn))) {
+        await page.mouse.down();
+        await page.waitForTimeout(a.down ?? 450);
+        await page.mouse.up();
+        await page.waitForTimeout(a.up ?? 150);
+      }
+      return;
+    }
     default:
       throw new Error(`알 수 없는 action: ${a.type}`);
   }
@@ -77,36 +97,116 @@ export async function slideshowApp(app, outDir, items, root) {
   return { file: dest, landscape: false, aspect: W / H };
 }
 
+/**
+ * 3D(WebGL) 앱 녹화: 브라우저 자체 동영상 녹화(recordVideo, 크기 고정)로 통째로 찍고,
+ * pause~resume 사이(입질 기다리기 등)는 기록해 둔 시각으로 잘라낸 뒤 이어 붙인다.
+ */
+async function captureVideoApp(app, outDir, seconds) {
+  const landscape = app.orientation === 'landscape';
+  const viewport = landscape ? { width: 844, height: 390 } : { width: 390, height: 844 };
+  const vdir = path.join(outDir, 'video');
+  await mkdir(vdir, { recursive: true });
+  const browser = await launchBrowser({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
+  const segs = [];
+  let videoFile;
+  try {
+    const context = await browser.newContext({ viewport, deviceScaleFactor: 1, hasTouch: true, locale: 'ko-KR', recordVideo: { dir: vdir, size: viewport } });
+    // 앱 설정을 미리 심어 둔다 (예: 게임 화질 고정 {"jjinaksi.q": "1"} → 느린 녹화 환경에서 자동 절전 모드 방지)
+    // 전체 화면·화면 회전 요청은 무시한다 (녹화 브라우저에서 전체 화면이 되면 화면 크기가 바뀌어 일부만 찍힌다)
+    await context.addInitScript(() => {
+      Element.prototype.requestFullscreen = () => Promise.resolve();
+      if (screen.orientation) screen.orientation.lock = () => Promise.resolve();
+    });
+    if (app.localStorage) await context.addInitScript((kv) => { for (const [k, v] of Object.entries(kv)) localStorage.setItem(k, v); }, app.localStorage);
+    const page = await context.newPage();
+    const t0 = Date.now();
+    const at = () => (Date.now() - t0) / 1000;
+    await page.goto(app.url, { waitUntil: 'networkidle', timeout: 30000 });
+    let from = at();
+    let used = 0;
+    // retry: { until: 조건, times, actions: [...] } — 조건이 참이 될 때까지 안쪽 동작을 반복 (예: 원하는 입질이 올 때까지 다시 던지기)
+    let cp = null;
+    const runAll = async (list) => {
+      for (const a of list) {
+        if (a.type === 'pause') {
+          if (from !== null) segs.push([from, at()]), (used += at() - from), (from = null);
+        } else if (a.type === 'resume') {
+          if (from === null) from = at();
+        } else if (a.type === 'checkpoint') {
+          cp = { n: segs.length, used, from };
+        } else if (a.type === 'rollbackUnless') {
+          // 조건이 거짓이면 checkpoint 이후 녹화를 버리고 멈춤 상태로 되돌린다 (예: 물고기를 놓친 판은 버림)
+          if (cp && !(await page.evaluate(a.fn))) (segs.length = cp.n), (used = cp.used), (from = null);
+        } else if (a.type === 'retry') {
+          for (let i = 0; i < (a.times ?? 5) && !(await page.evaluate(a.until)); i++) await runAll(a.actions ?? []);
+        } else await runAction(page, a).catch((e) => console.warn(`  action 실패(${a.type}): ${e.message.split(String.fromCharCode(10))[0]}`));
+      }
+    };
+    await runAll(app.actions ?? []);
+    if (from === null) from = at();
+    const left = seconds - used - (at() - from);
+    if (left > 0) await page.waitForTimeout(left * 1000);
+    segs.push([from, at()]);
+    await context.close();
+    videoFile = await page.video().path();
+  } finally {
+    await browser.close();
+  }
+  const f = segs.map(([a, b], i) => `[0:v]trim=start=${a.toFixed(3)}:end=${b.toFixed(3)},setpts=PTS-STARTPTS[s${i}]`);
+  f.push(`${segs.map((_, i) => `[s${i}]`).join('')}concat=n=${segs.length}:v=1:a=0,fps=30,scale=trunc(iw/2)*2:trunc(ih/2)*2[out]`);
+  const dest = path.join(outDir, 'capture.mp4');
+  await ffmpeg(['-y', '-i', videoFile, '-filter_complex', f.join(';'), '-map', '[out]', '-pix_fmt', 'yuv420p', '-c:v', 'libx264', '-crf', '18', dest]);
+  return { file: dest, landscape };
+}
+
 export async function captureApp(app, outDir, seconds) {
   if (!app.url) return null;
+  if (app.webgl) return captureVideoApp(app, outDir, seconds);
   const landscape = app.orientation === 'landscape';
   const viewport = landscape ? { width: 844, height: 390 } : { width: 390, height: 844 };
   const frameDir = path.join(outDir, 'frames');
   await mkdir(frameDir, { recursive: true });
 
-  const browser = await launchBrowser();
+  // 3D(WebGL) 앱은 소프트웨어 렌더러로 띄운다 (헤드리스 기본값은 WebGL 이 꺼져 있다)
+  const browser = await launchBrowser(app.webgl ? { args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] } : {});
   const frames = [];
+  // pause/resume 동작으로 기다리는 구간을 영상에서 잘라낸다 (gap 만큼 시간을 당긴다)
+  const rec = { on: true, gap: 0, pausedAt: 0 };
+  const now = () => Date.now() / 1000;
   try {
-    const context = await browser.newContext({ viewport, deviceScaleFactor: 2, isMobile: !landscape, hasTouch: true, locale: 'ko-KR' });
+    // 3D(WebGL) 앱은 배율 1 (소프트웨어 렌더링이 느리고, 중간에 프레임 크기가 바뀌는 문제를 막는다)
+    const context = await browser.newContext({ viewport, deviceScaleFactor: app.webgl ? 1 : 2, isMobile: !landscape, hasTouch: true, locale: 'ko-KR' });
     const page = await context.newPage();
     await page.goto(app.url, { waitUntil: 'networkidle', timeout: 30000 });
 
     const cdp = await context.newCDPSession(page);
-    cdp.on('Page.screencastFrame', ({ data, metadata, sessionId }) => {
-      frames.push({ data, t: metadata.timestamp ?? Date.now() / 1000 });
+    cdp.on('Page.screencastFrame', ({ data, sessionId }) => {
+      if (rec.on) frames.push({ data, t: now() - rec.gap });
       cdp.send('Page.screencastFrameAck', { sessionId }).catch(() => {});
     });
-    await cdp.send('Page.startScreencast', { format: 'jpeg', quality: 88, maxWidth: viewport.width * 2, maxHeight: viewport.height * 2 });
+    const dpr = app.webgl ? 1 : 2;
+    await cdp.send('Page.startScreencast', { format: 'jpeg', quality: 88, maxWidth: viewport.width * dpr, maxHeight: viewport.height * dpr });
     const started = Date.now();
 
     const actions = app.actions?.length ? app.actions : [{ type: 'wait', ms: 2500 }, { type: 'scroll', y: 300 }, { type: 'wait', ms: 1500 }];
     for (const a of actions) {
+      if (a.type === 'pause') {
+        if (rec.on) (rec.on = false), (rec.pausedAt = now());
+        continue;
+      }
+      if (a.type === 'resume') {
+        if (!rec.on) (rec.gap += now() - rec.pausedAt), (rec.on = true);
+        continue;
+      }
       await runAction(page, a).catch((e) => console.warn(`  action 실패(${a.type}): ${e.message}`));
     }
-    const left = seconds * 1000 - (Date.now() - started);
+    if (!rec.on) (rec.gap += now() - rec.pausedAt), (rec.on = true);
+    const left = seconds * 1000 - (Date.now() - started - rec.gap * 1000);
     if (left > 0) await page.waitForTimeout(left);
+    const endT = now() - rec.gap;
+    rec.on = false; // 멈춘 뒤 늦게 도착하는 프레임은 버린다
     await cdp.send('Page.stopScreencast');
-    if (frames.length) frames.push({ t: frames[0].t + (Date.now() - started) / 1000 });
+    if (frames.length) frames.push({ t: endT });
   } finally {
     await browser.close();
   }

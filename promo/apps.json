@@ -297,12 +297,12 @@
       "actions": []
     },
     {
-      "id": "fishing-game",
-      "enabled": false,
+      "id": "sea-float-fishing",
+      "enabled": true,
       "name": "바다 찌낚시",
       "keyword": "바다 찌낚시",
       "tagline": "손맛 나는 3D 바다낚시",
-      "description": "3D 바다 찌낚시 게임. 찌가 들어가는 순간 챔질해서 물고기를 낚고, 장비를 업그레이드해 더 큰 어종에 도전한다. 출석·접속 보상 있음.",
+      "description": "3D 바다 찌낚시 게임. 방파제에서 캐스팅하고, 찌가 쑥 들어가는 순간 챔질해서 물고기를 건다. 물고기가 저항하면 줄을 풀어주고 감아서 끌어올리며, 잡은 어종은 크기·무게·가격과 함께 도감에 등록된다. 미끼·낚싯대·찌 등 장비를 업그레이드하고 밑밥을 뿌려 입질을 늘릴 수 있다. 출석·접속 보상 있음. 현금 환전 없음.",
       "audience": "낚시·캐주얼 게임 좋아하는 20~50대",
       "emoji": "🎣",
       "theme": {
@@ -311,8 +311,136 @@
         "accent": "#ffe066"
       },
       "orientation": "landscape",
+      "landscapeCrop": 0.7,
+      "webgl": true,
       "url": "",
-      "actions": []
+      "actions": [
+        {
+          "type": "wait",
+          "ms": 2400
+        },
+        {
+          "type": "click",
+          "selector": "#coach-x"
+        },
+        {
+          "type": "click",
+          "selector": "#btn-main"
+        },
+        {
+          "type": "wait",
+          "ms": 700
+        },
+        {
+          "type": "click",
+          "selector": "#btn-main"
+        },
+        {
+          "type": "wait",
+          "ms": 2600
+        },
+        {
+          "type": "pause"
+        },
+        {
+          "type": "retry",
+          "until": "!document.getElementById('result').hidden",
+          "times": 8,
+          "actions": [
+            {
+              "type": "pause"
+            },
+            {
+              "type": "retry",
+              "until": "G.mode === 'bite' && G.bite && !G.bite.f.thief",
+              "times": 12,
+              "actions": [
+                {
+                  "type": "clickIf",
+                  "fn": "G.mode === 'idle'",
+                  "selector": "#btn-main"
+                },
+                {
+                  "type": "wait",
+                  "ms": 700
+                },
+                {
+                  "type": "clickIf",
+                  "fn": "G.mode === 'casting'",
+                  "selector": "#btn-main"
+                },
+                {
+                  "type": "waitFn",
+                  "fn": "G.mode === 'bite' && G.bite && !G.bite.f.thief || G.mode === 'idle'",
+                  "ms": 90000
+                },
+                {
+                  "type": "clickIf",
+                  "fn": "G.mode === 'bite' && G.bite && G.bite.f.thief",
+                  "selector": "#btn-main"
+                },
+                {
+                  "type": "wait",
+                  "ms": 400
+                }
+              ]
+            },
+            {
+              "type": "waitFn",
+              "fn": "G.bite && (G.bite.t - G.bite.nib) > G.bite.b.sink * G.bite.b.early + .05",
+              "ms": 25000
+            },
+            {
+              "type": "checkpoint"
+            },
+            {
+              "type": "resume"
+            },
+            {
+              "type": "wait",
+              "ms": 350
+            },
+            {
+              "type": "click",
+              "selector": "#btn-main"
+            },
+            {
+              "type": "pulseUntil",
+              "selector": "#btn-main",
+              "fn": "G.mode !== 'fight'",
+              "ms": 2400
+            },
+            {
+              "type": "pause"
+            },
+            {
+              "type": "pulseUntil",
+              "selector": "#btn-main",
+              "fn": "G.mode !== 'fight'",
+              "ms": 120000
+            },
+            {
+              "type": "waitFn",
+              "fn": "!document.getElementById('result').hidden",
+              "ms": 20000
+            },
+            {
+              "type": "rollbackUnless",
+              "fn": "!document.getElementById('result').hidden"
+            }
+          ]
+        },
+        {
+          "type": "resume"
+        },
+        {
+          "type": "wait",
+          "ms": 3200
+        }
+      ],
+      "localStorage": {
+        "jjinaksi.q": "1"
+      }
     }
   ]
 }

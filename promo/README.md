@@ -50,6 +50,10 @@
    { "type": "wait", "ms": 3000 }]
   ```
   `type`으로는 `wait` / `click` / `tap(x,y)` / `fill` / `type` / `upload` / `scroll`을 쓸 수 있습니다.
+  게임처럼 상황이 무작위인 앱용: `waitFn`(페이지 JS 조건이 참일 때까지) · `clickIf` · `pulseUntil`(눌렀다 뗐다 반복) ·
+  `pause`/`resume`(그 사이를 영상에서 잘라냄) · `retry`({until, times, actions}) · `checkpoint`/`rollbackUnless`(실패한 판의 녹화를 버림).
+  3D(WebGL) 앱은 `"webgl": true`(소프트웨어 렌더링 + 브라우저 동영상 녹화), 앱 설정은 `"localStorage": {..}`, 가로 앱은 `"landscapeCrop": 0.7`.
+  코드·공개 주소가 없는 앱은 `"slides": {"images": [...], "crop": "w:h:x:y"}`로 스크린샷 슬라이드를 씁니다.
 - `theme`: 배경 그라데이션과 강조색, `emoji`: 대표 이모지입니다.
 - `account.handle`: 인스타 아이디로 바꿔 주세요.
 
