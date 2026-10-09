@@ -16,40 +16,23 @@ const SHAPES: { value: FootType | 'unknown'; label: string; hint: string }[] = [
 ];
 
 const ANALYZE_LINES = [
-  '발가락 끝점 찾는 중…',
+  '발 전체 스캔 중…',
   '발가락 길이 비교 중…',
   '발톱 광택에서 설렘 지수 측정 중',
   '발냄새는 측정하지 않았어요 (다행)',
 ];
 const LINE_MS = 900;
 
-// 분석 연출용 발가락 끝점(사진 위 % 좌표). 실제 인식이 아니라 유형별 모양을 흉내 낸다.
-const TOE_POINTS: Record<FootType, [number, number][]> = {
-  egypt: [[26, 26], [40, 33], [53, 40], [65, 48], [76, 57]],
-  greek: [[26, 34], [40, 24], [53, 35], [65, 45], [76, 55]],
-  roman: [[26, 29], [40, 28], [53, 30], [65, 44], [76, 55]],
-};
 const MEASURE_LABEL: Record<FootType, string> = {
   egypt: '엄지 > 둘째 · 경사 23°',
   greek: '둘째 > 엄지 · +4.2mm',
   roman: '엄지 ≈ 둘째 ≈ 셋째',
 };
 
+// 분석 연출: 사진 위를 위에서 아래로 훑는 스캔. 사진 구도와 상관없이 어울리도록 위치 표시는 하지 않는다.
 function ScanOverlay({ type, done }: { type: FootType; done: boolean }) {
-  const pts = TOE_POINTS[type];
-  const top = Math.min(...pts.map(([, y]) => y));
-  const path = pts.map(([x, y], i) => `${i ? 'L' : 'M'}${x} ${y}`).join(' ');
   return (
     <div className={`scan-overlay ${done ? 'done' : ''}`} aria-hidden>
-      <svg className="ref-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <line className="ref-line" x1="10" x2="90" y1={top} y2={top} />
-      </svg>
-      <svg className="path-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <path className="toe-path" d={path} />
-      </svg>
-      {pts.map(([x, y], i) => (
-        <span key={i} className="toe-dot" style={{ left: `${x}%`, top: `${y}%`, animationDelay: `${0.3 + i * 0.3}s` }} />
-      ))}
       <span className="corner tl" /><span className="corner tr" /><span className="corner bl" /><span className="corner br" />
       {!done && <div className="scan-line" />}
       {done ? (

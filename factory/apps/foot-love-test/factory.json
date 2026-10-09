@@ -65,9 +65,9 @@
     "miniAppId": 84445
   },
   "bundle": {
-    "deploymentId": "01a11ede-9f37-7cb0-84fd-9008adca02e8",
+    "deploymentId": "01a11ee2-cf9a-735c-aa5d-bfea71a4f131",
     "status": "CREATED",
-    "uploadedAt": "2026-10-09T04:14:44.835Z"
+    "uploadedAt": "2026-10-09T04:19:22.013Z"
   },
   "steps": {
     "scaffold": "done",
@@ -79,5 +79,5 @@
     "upload": "done",
     "ready_for_review": "done"
   },
-  "updatedAt": "2026-10-09T04:16:28.338Z"
+  "updatedAt": "2026-10-09T04:20:31.955Z"
 }
