@@ -36,7 +36,7 @@
           "type": "click"
         },
         {
-          "ms": 3200,
+          "ms": 4000,
           "type": "wait"
         },
         {
@@ -65,9 +65,9 @@
     "miniAppId": 84445
   },
   "bundle": {
-    "deploymentId": "01a11ed2-d87a-7019-99ac-11cf0179761a",
+    "deploymentId": "01a11ede-9f37-7cb0-84fd-9008adca02e8",
     "status": "CREATED",
-    "uploadedAt": "2026-10-09T04:01:47.976Z"
+    "uploadedAt": "2026-10-09T04:14:44.835Z"
   },
   "steps": {
     "scaffold": "done",
@@ -79,5 +79,5 @@
     "upload": "done",
     "ready_for_review": "done"
   },
-  "updatedAt": "2026-10-09T04:02:05.109Z"
+  "updatedAt": "2026-10-09T04:16:28.338Z"
 }

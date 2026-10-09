@@ -16,11 +16,50 @@ const SHAPES: { value: FootType | 'unknown'; label: string; hint: string }[] = [
 ];
 
 const ANALYZE_LINES = [
-  '발가락 개수 세는 중… 10개 맞죠?',
+  '발가락 끝점 찾는 중…',
+  '발가락 길이 비교 중…',
   '발톱 광택에서 설렘 지수 측정 중',
-  '발바닥 주름으로 밀당력 계산 중',
   '발냄새는 측정하지 않았어요 (다행)',
 ];
+const LINE_MS = 900;
+
+// 분석 연출용 발가락 끝점(사진 위 % 좌표). 실제 인식이 아니라 유형별 모양을 흉내 낸다.
+const TOE_POINTS: Record<FootType, [number, number][]> = {
+  egypt: [[26, 26], [40, 33], [53, 40], [65, 48], [76, 57]],
+  greek: [[26, 34], [40, 24], [53, 35], [65, 45], [76, 55]],
+  roman: [[26, 29], [40, 28], [53, 30], [65, 44], [76, 55]],
+};
+const MEASURE_LABEL: Record<FootType, string> = {
+  egypt: '엄지 > 둘째 · 경사 23°',
+  greek: '둘째 > 엄지 · +4.2mm',
+  roman: '엄지 ≈ 둘째 ≈ 셋째',
+};
+
+function ScanOverlay({ type, done }: { type: FootType; done: boolean }) {
+  const pts = TOE_POINTS[type];
+  const top = Math.min(...pts.map(([, y]) => y));
+  const path = pts.map(([x, y], i) => `${i ? 'L' : 'M'}${x} ${y}`).join(' ');
+  return (
+    <div className={`scan-overlay ${done ? 'done' : ''}`} aria-hidden>
+      <svg className="ref-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <line className="ref-line" x1="10" x2="90" y1={top} y2={top} />
+      </svg>
+      <svg className="path-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path className="toe-path" d={path} />
+      </svg>
+      {pts.map(([x, y], i) => (
+        <span key={i} className="toe-dot" style={{ left: `${x}%`, top: `${y}%`, animationDelay: `${0.3 + i * 0.3}s` }} />
+      ))}
+      <span className="corner tl" /><span className="corner tr" /><span className="corner bl" /><span className="corner br" />
+      {!done && <div className="scan-line" />}
+      {done ? (
+        <div className="detect-badge">{RESULTS[type].emoji} {RESULTS[type].name} 감지</div>
+      ) : (
+        <div className="measure-chip">{MEASURE_LABEL[type]}</div>
+      )}
+    </div>
+  );
+}
 
 export default function App() {
   const [step, setStep] = useState<Step>('home');
@@ -40,8 +79,8 @@ export default function App() {
     if (step !== 'analyze') return;
     setLineIdx(0);
     setDone(false);
-    const tick = setInterval(() => setLineIdx((i) => Math.min(i + 1, ANALYZE_LINES.length - 1)), 700);
-    const end = setTimeout(() => setDone(true), 700 * ANALYZE_LINES.length);
+    const tick = setInterval(() => setLineIdx((i) => Math.min(i + 1, ANALYZE_LINES.length - 1)), LINE_MS);
+    const end = setTimeout(() => setDone(true), LINE_MS * ANALYZE_LINES.length);
     return () => { clearInterval(tick); clearTimeout(end); };
   }, [step]);
 
@@ -147,7 +186,15 @@ export default function App() {
   if (step === 'analyze') {
     return (
       <main className="page center">
-        {photo && <img className={`photo ${done ? '' : 'scan'}`} src={photo} alt="분석 중인 발 사진" />}
+        {photo && (
+          <div className="scan-wrap">
+            <img className="photo" src={photo} alt="분석 중인 발 사진" />
+            <ScanOverlay type={type} done={done} />
+          </div>
+        )}
+        <div className="progress" aria-hidden>
+          <div className="progress-fill" style={{ animationDuration: `${LINE_MS * ANALYZE_LINES.length}ms` }} />
+        </div>
         <h1 className="title">{done ? '분석 완료!' : '발가락 정밀 분석 중'}</h1>
         <p className="body">{done ? '당신의 연애 스타일이 나왔어요.' : ANALYZE_LINES[lineIdx]}</p>
         <div className="bottom">

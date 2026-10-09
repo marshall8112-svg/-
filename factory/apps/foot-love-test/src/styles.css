@@ -69,8 +69,6 @@ body {
 .highlight { border-color: var(--brand); }
 .photo { width: 100%; max-height: 300px; object-fit: cover; border-radius: var(--radius); }
 .photo.small { max-height: 180px; }
-.photo.scan { animation: scan 1.2s ease-in-out infinite alternate; }
-@keyframes scan { from { filter: hue-rotate(0deg) brightness(1); } to { filter: hue-rotate(40deg) brightness(1.2); } }
 .options { display: flex; flex-direction: column; gap: 10px; }
 .option {
   appearance: none; text-align: left; cursor: pointer;
@@ -87,3 +85,43 @@ body {
 .bar { height: 10px; border-radius: 5px; background: var(--line); overflow: hidden; }
 .bar-fill { height: 100%; background: var(--brand); border-radius: 5px; }
 .bottom.row { display: flex; gap: 8px; }
+
+/* 분석 연출 */
+.scan-wrap { position: relative; width: 100%; border-radius: var(--radius); overflow: hidden; }
+.scan-wrap .photo { display: block; max-height: 320px; }
+.scan-overlay { position: absolute; inset: 0; pointer-events: none; }
+.scan-overlay::before { content: ''; position: absolute; inset: 0; background:
+  repeating-linear-gradient(0deg, transparent 0 23px, rgba(255,255,255,.18) 23px 24px),
+  repeating-linear-gradient(90deg, transparent 0 23px, rgba(255,255,255,.18) 23px 24px);
+  background-color: rgba(0,0,0,.12); transition: opacity .4s; }
+.scan-overlay.done::before { opacity: .35; }
+.scan-overlay svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.toe-dot { position: absolute; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: #fff;
+  border: 3px solid var(--brand); box-shadow: 0 0 0 4px rgba(255,255,255,.35); opacity: 0; animation: dot-pop .35s ease-out forwards; }
+.toe-path { fill: none; stroke: #fff; stroke-width: 2.5; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.path-svg { clip-path: inset(0 100% 0 0); animation: reveal .9s ease-out 1.8s forwards; }
+.ref-line { stroke: var(--brand); stroke-width: 1.5; stroke-dasharray: 6 4; vector-effect: non-scaling-stroke;
+  opacity: 0; animation: fade-in .4s 2.4s forwards; }
+.scan-line { position: absolute; left: 0; right: 0; height: 3px; top: 0; background: var(--brand);
+  box-shadow: 0 0 12px 4px color-mix(in srgb, var(--brand) 60%, transparent); animation: sweep 1.4s ease-in-out infinite alternate; }
+.corner { position: absolute; width: 22px; height: 22px; border: 3px solid #fff; }
+.corner.tl { top: 10px; left: 10px; border-right: 0; border-bottom: 0; }
+.corner.tr { top: 10px; right: 10px; border-left: 0; border-bottom: 0; }
+.corner.bl { bottom: 10px; left: 10px; border-right: 0; border-top: 0; }
+.corner.br { bottom: 10px; right: 10px; border-left: 0; border-top: 0; }
+.measure-chip { position: absolute; left: 12px; bottom: 12px; padding: 6px 10px; border-radius: 8px;
+  background: rgba(0,0,0,.65); color: #fff; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums;
+  opacity: 0; animation: fade-in .4s 2.6s forwards; }
+.detect-badge { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); white-space: nowrap;
+  padding: 8px 14px; border-radius: 999px; background: var(--brand); color: #fff; font-size: 16px; font-weight: 700; }
+.progress { width: 100%; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.progress-fill { height: 100%; width: 0; background: var(--brand); animation: grow linear forwards; }
+@keyframes sweep { from { top: 0; } to { top: calc(100% - 3px); } }
+@keyframes dot-pop { 0% { opacity: 0; transform: scale(0); } 70% { opacity: 1; transform: scale(1.4); } 100% { opacity: 1; transform: scale(1); } }
+@keyframes reveal { to { clip-path: inset(0 0 0 0); } }
+@keyframes fade-in { to { opacity: 1; } }
+@keyframes grow { to { width: 100%; } }
+@media (prefers-reduced-motion: reduce) {
+  .scan-line { display: none; }
+  .toe-dot, .path-svg, .ref-line, .measure-chip { animation-duration: 1ms; animation-delay: 0s; }
+}
