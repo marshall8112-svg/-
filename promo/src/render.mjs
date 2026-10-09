@@ -1,7 +1,7 @@
 // 기획안 + (있으면) 앱 화면 녹화를 1080x1920 릴스 영상으로 합성한다.
 // 레이어(아래→위): 천천히 흐르는 배경 · 폰 그림자 · 둥근 모서리 앱 화면 · 베젤 · 자막(슬라이드+페이드) · 진행 바
 // 글자·장식 레이어는 HTML을 투명 PNG로 찍고, 움직임은 FFmpeg 표현식으로 준다.
-import { readdir, readFile, writeFile } from 'node:fs/promises';
+import { access, readdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { launchBrowser, ffmpeg } from './capture.mjs';
 
@@ -13,6 +13,8 @@ const LANDSCAPE_CROP = 0.62;
 const DRIFT = 1.1; // 배경을 10% 크게 찍어 천천히 이동
 const RADIUS = 46; // 앱 화면 모서리
 const IN = 0.38; // 자막 등장 시간
+const BADGE_W = 520; // 토스 미니앱 배지 폭(px). 원본 비율 그대로
+const BADGE_Y = 1530; // 마지막 화면에서 주요 메시지 아래
 const OUT = 0.22; // 자막 퇴장 시간
 const FONT_CSS = `@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@500;700;900&display=block');`;
 const FONT_STACK = `'Noto Sans KR', 'Noto Sans CJK KR', 'Apple SD Gothic Neo', 'WenQuanYi Zen Hei', sans-serif`;
@@ -183,6 +185,10 @@ export async function renderReel({ plan, app, account, capture, outDir, bgmDir, 
     bezelIdx = input('-loop', '1', '-t', T, '-i', P('bezel.png'));
   }
   const ovIdx = items.map((it) => input('-loop', '1', '-t', T, '-i', it.png));
+  // 토스 미니앱 배지 (외부 광고 가이드: 영상당 1개, 메시지 아래, 수정·애니메이션 금지)
+  const badgeFile = path.join(bgmDir, '..', 'badge', 'toss-miniapp-badge-black.png');
+  const hasBadge = await access(badgeFile).then(() => true, () => false);
+  const badgeIdx = hasBadge ? input('-loop', '1', '-t', T, '-i', badgeFile) : null;
   const barIdx = input('-f', 'lavfi', '-t', T, '-i', `color=c=${app.theme.accent}:s=${W}x8:r=30`);
   const bgm = await pickBgm(bgmDir);
   const audioIdx = bgm
@@ -222,6 +228,13 @@ export async function renderReel({ plan, app, account, capture, outDir, bgmDir, 
     f.push(`${last}[o${i}]overlay=x=0:y='${y}':enable='between(t,${s},${e})'[v${i}]`);
     last = `[v${i}]`;
   });
+  if (hasBadge) {
+    const cta = items.at(-1);
+    // 페이드·이동 없이 고정 표시 (마지막 화면 배경이 다 덮인 뒤에 나타나게 0.5초 뒤)
+    f.push(`[${badgeIdx}:v]scale=${BADGE_W}:-1,format=rgba[badge]`);
+    f.push(`${last}[badge]overlay=x=${(W - BADGE_W) / 2}:y=${BADGE_Y}:enable='gte(t,${(cta.start + 0.5).toFixed(3)})'[vbd]`);
+    last = '[vbd]';
+  }
   // 위쪽 진행 바 (스토리처럼 차오름)
   f.push(`${last}[${barIdx}:v]overlay=x='-${W}+${W}*t/${T}':y=0[vb]`);
   f.push(`[vb]format=yuv420p[vout]`);
@@ -245,5 +258,5 @@ export async function renderReel({ plan, app, account, capture, outDir, bgmDir, 
   // 미리보기용 썸네일 (hook 화면)
   await ffmpeg(['-y', '-ss', '1.2', '-i', out, '-frames:v', '1', '-vf', 'scale=540:-2', P('thumb.jpg')]);
   await writeFile(P('timeline.json'), JSON.stringify({ total, items: items.map(({ png, ...r }) => r) }, null, 2));
-  return { file: out, seconds: total, bgm: bgm ? path.basename(bgm.file) : null, narrated: !!narration };
+  return { file: out, seconds: total, bgm: bgm ? path.basename(bgm.file) : null, narrated: !!narration, badge: hasBadge };
 }

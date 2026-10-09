@@ -71,6 +71,7 @@ export async function makePlan({ app, account, template, recent = [] }) {
 }
 
 export function buildCaption(plan, app, account) {
-  const tags = [...plan.hashtags, '앱인토스', '토스미니앱'].filter((t, i, a) => a.indexOf(t) === i);
+  // 앱인토스 외부 광고 가이드 권장 태그: #서비스명 #토스미니앱 #토스에서만나보세요
+  const tags = [...plan.hashtags, app.keyword.replace(/\s+/g, ''), '토스미니앱', '토스에서만나보세요'].filter((t, i, a) => a.indexOf(t) === i);
   return `${plan.caption}\n\n👉 ${account.searchHint}: ${app.keyword}\n\n${tags.map((t) => `#${t}`).join(' ')}`;
 }

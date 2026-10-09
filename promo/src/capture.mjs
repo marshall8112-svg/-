@@ -5,8 +5,8 @@ import { spawn } from 'node:child_process';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-export function launchBrowser() {
-  return chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined });
+export function launchBrowser(opts = {}) {
+  return chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, ...opts });
 }
 
 export function ffmpeg(args) {
