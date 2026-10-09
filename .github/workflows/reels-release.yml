@@ -45,7 +45,7 @@ jobs:
           INPUT_APP: ${{ inputs.app }}
         run: |
           if [ -n "$INPUT_APP" ]; then APPS="$INPUT_APP"
-          else APPS=$(git diff --name-only --diff-filter=A HEAD~1 HEAD -- released/ | xargs -r -n1 basename | tr '\n' ' ')
+          else APPS=$(git diff --name-only --diff-filter=A HEAD~1 HEAD -- released/ | xargs -r -n1 basename | grep -v -i '^readme' | tr '\n' ' ')
           fi
           [ -z "$APPS" ] && { echo "새로 출시된 앱이 없어요"; exit 0; }
           echo "apps=$APPS" >> "$GITHUB_OUTPUT"
