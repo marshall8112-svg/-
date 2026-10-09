@@ -6,17 +6,54 @@
   },
   "apps": [
     {
+      "id": "tripcut",
+      "enabled": true,
+      "name": "트립컷",
+      "keyword": "트립컷",
+      "tagline": "여행사진을 동영상으로",
+      "description": "여행 사진을 최대 50장까지 고르면 26곡의 감성 BGM 중 하나와 함께 다양한 스타일로 자동 편집해 동영상으로 만들어 준다. 사진은 전체·여행·음식·사람·풍경으로 골라 볼 수 있고, BGM은 여행·감성·신나는·잔잔한 분위기별로 고를 수 있다.",
+      "audience": "여행 다녀온 20~40대, 여행 사진 정리 못 한 사람",
+      "emoji": "✈️",
+      "theme": {
+        "bg1": "#1d1240",
+        "bg2": "#e5735a",
+        "accent": "#ffd166"
+      },
+      "url": "",
+      "slides": {
+        "images": [
+          "assets/apps/tripcut/shot-1.png",
+          "assets/apps/tripcut/shot-2.png",
+          "assets/apps/tripcut/shot-3.png"
+        ]
+      },
+      "actions": []
+    },
+    {
       "id": "filmlike",
       "enabled": true,
       "name": "필름라이크",
       "keyword": "필름라이크",
       "tagline": "사진을 필름카메라 감성으로",
-      "description": "TODO: 실제 기능으로 고쳐주세요. 사진을 고르면 필름카메라로 찍은 듯한 색감·그레인·날짜 스탬프를 입혀주는 미니앱.",
-      "audience": "감성 사진 좋아하는 10~30대",
+      "description": "사진을 찍거나 앨범에서 고른 뒤 필름 느낌으로 바꿔 준다. 필름을 몰라도 '따스한 햇살', '거칠고 오래된 사진'처럼 느낌으로 고를 수 있고, 현행·단종 필름 205종을 브랜드별로 고를 수 있다. 입자·프레임·날짜 각인을 조절하고 결과를 사진첩에 바로 저장한다. 실제 필름을 비슷하게 따라 한 색감.",
+      "audience": "감성 사진·필름카메라 좋아하는 20~30대",
       "emoji": "🎞️",
-      "theme": { "bg1": "#2b1d14", "bg2": "#8a5a3b", "accent": "#ffcf7a" },
+      "theme": {
+        "bg1": "#2b1d14",
+        "bg2": "#8a5a3b",
+        "accent": "#ffcf7a"
+      },
       "url": "",
-      "actions": []
+      "actions": [],
+      "slides": {
+        "images": [
+          "assets/apps/filmlike/shot-1.png",
+          "assets/apps/filmlike/shot-2.png",
+          "assets/apps/filmlike/shot-3.png",
+          "assets/apps/filmlike/shot-4.png"
+        ],
+        "crop": "490:802:73:246"
+      }
     },
     {
       "id": "hachanum",
@@ -27,7 +64,11 @@
       "description": "TODO: 실제 기능으로 고쳐주세요. 몇 가지 질문/입력으로 '하찮음 지수'를 재미로 측정해 결과 카드를 보여주는 미니앱.",
       "audience": "밈·테스트 좋아하는 10~20대",
       "emoji": "🐜",
-      "theme": { "bg1": "#101820", "bg2": "#3a4a5c", "accent": "#b8ff5c" },
+      "theme": {
+        "bg1": "#101820",
+        "bg2": "#3a4a5c",
+        "accent": "#b8ff5c"
+      },
       "url": "",
       "actions": []
     },
@@ -40,7 +81,11 @@
       "description": "TODO: 실제 기능으로 고쳐주세요. 얼굴 사진을 보고 그럴듯하지만 아무말인 관상 풀이를 해주는 재미용 미니앱.",
       "audience": "운세·관상 콘텐츠 좋아하는 20~30대",
       "emoji": "🔮",
-      "theme": { "bg1": "#1b1030", "bg2": "#5b2a86", "accent": "#ffd84d" },
+      "theme": {
+        "bg1": "#1b1030",
+        "bg2": "#5b2a86",
+        "accent": "#ffd84d"
+      },
       "url": "",
       "actions": []
     },
@@ -53,18 +98,50 @@
       "description": "발 사진을 올리고 발가락 모양(엄지가 제일 김=이집트형 / 둘째가 제일 김=그리스형 / 앞쪽이 비슷=로마형)을 고르면, 재미용 연애 스타일 결과를 보여준다. 결과: 연애 별명(예: 사랑의 마라톤 완주자, 밀당 파라오), 연애 능력치(밀당력·직진력·질투 지수·발냄새 관용도), 찰떡궁합 발 유형, 광고 보고 숨겨진 연애 비밀 보기. 사진은 휴대폰 밖으로 안 나감. 과학적 근거 없는 재미용.",
       "audience": "심리테스트·연애 밈 좋아하는 10~30대",
       "emoji": "🦶",
-      "theme": { "bg1": "#3a1408", "bg2": "#c4502f", "accent": "#ffc94d" },
+      "theme": {
+        "bg1": "#3a1408",
+        "bg2": "#c4502f",
+        "accent": "#ffc94d"
+      },
       "url": "",
       "actions": [
-        { "type": "wait", "ms": 2400 },
-        { "type": "upload", "selector": "input[type=file]", "file": "assets/samples/foot.svg" },
-        { "type": "wait", "ms": 1400 },
-        { "type": "click", "selector": "text=둘째 발가락이 제일 길어요" },
-        { "type": "wait", "ms": 4100 },
-        { "type": "click", "selector": "text=결과 보기" },
-        { "type": "wait", "ms": 2500 },
-        { "type": "scroll", "y": 500 },
-        { "type": "wait", "ms": 2000 }
+        {
+          "type": "wait",
+          "ms": 2400
+        },
+        {
+          "type": "upload",
+          "selector": "input[type=file]",
+          "file": "assets/samples/foot.svg"
+        },
+        {
+          "type": "wait",
+          "ms": 1400
+        },
+        {
+          "type": "click",
+          "selector": "text=둘째 발가락이 제일 길어요"
+        },
+        {
+          "type": "wait",
+          "ms": 4100
+        },
+        {
+          "type": "click",
+          "selector": "text=결과 보기"
+        },
+        {
+          "type": "wait",
+          "ms": 2500
+        },
+        {
+          "type": "scroll",
+          "y": 500
+        },
+        {
+          "type": "wait",
+          "ms": 2000
+        }
       ]
     },
     {
@@ -76,27 +153,121 @@
       "description": "직장인 공감 질문 10개(월요일 알람, 회의 중 표정, 퇴근 10분 전 업무 요청, 몰래 검색해 본 것 등)에 4지선다로 답하면 퇴사 지수(%), 예상 퇴사일(D-n), 칭호 5단계(회사가 집인 사람 / 존버 장인 / 이직 사이트 눈팅러 / 사직서 초안 작성자 / 퇴사 카운트다운 돌입), 월요병·번아웃·탈출 욕구 수치, 생존 팁을 보여준다. 광고 보고 상사 대처 비법 보기. 재미용.",
       "audience": "회사 생활에 지친 20~40대 직장인",
       "emoji": "🚪",
-      "theme": { "bg1": "#0c2b23", "bg2": "#1f8a70", "accent": "#ffd166" },
+      "theme": {
+        "bg1": "#0c2b23",
+        "bg2": "#1f8a70",
+        "accent": "#ffd166"
+      },
       "url": "",
       "actions": [
-        { "type": "wait", "ms": 2400 },
-        { "type": "click", "selector": "text=시작하기" },
-        { "type": "wait", "ms": 500 },
-        { "type": "click", "selector": ".option >> nth=3" }, { "type": "wait", "ms": 380 },
-        { "type": "click", "selector": ".option >> nth=2" }, { "type": "wait", "ms": 380 },
-        { "type": "click", "selector": ".option >> nth=3" }, { "type": "wait", "ms": 380 },
-        { "type": "click", "selector": ".option >> nth=2" }, { "type": "wait", "ms": 380 },
-        { "type": "click", "selector": ".option >> nth=3" }, { "type": "wait", "ms": 380 },
-        { "type": "click", "selector": ".option >> nth=2" }, { "type": "wait", "ms": 380 },
-        { "type": "click", "selector": ".option >> nth=3" }, { "type": "wait", "ms": 380 },
-        { "type": "click", "selector": ".option >> nth=3" }, { "type": "wait", "ms": 380 },
-        { "type": "click", "selector": ".option >> nth=2" }, { "type": "wait", "ms": 380 },
-        { "type": "click", "selector": ".option >> nth=3" },
-        { "type": "wait", "ms": 500 },
-        { "type": "click", "selector": "text=결과 보기" },
-        { "type": "wait", "ms": 3500 },
-        { "type": "scroll", "y": 420 },
-        { "type": "wait", "ms": 3000 }
+        {
+          "type": "wait",
+          "ms": 2400
+        },
+        {
+          "type": "click",
+          "selector": "text=시작하기"
+        },
+        {
+          "type": "wait",
+          "ms": 500
+        },
+        {
+          "type": "click",
+          "selector": ".option >> nth=3"
+        },
+        {
+          "type": "wait",
+          "ms": 380
+        },
+        {
+          "type": "click",
+          "selector": ".option >> nth=2"
+        },
+        {
+          "type": "wait",
+          "ms": 380
+        },
+        {
+          "type": "click",
+          "selector": ".option >> nth=3"
+        },
+        {
+          "type": "wait",
+          "ms": 380
+        },
+        {
+          "type": "click",
+          "selector": ".option >> nth=2"
+        },
+        {
+          "type": "wait",
+          "ms": 380
+        },
+        {
+          "type": "click",
+          "selector": ".option >> nth=3"
+        },
+        {
+          "type": "wait",
+          "ms": 380
+        },
+        {
+          "type": "click",
+          "selector": ".option >> nth=2"
+        },
+        {
+          "type": "wait",
+          "ms": 380
+        },
+        {
+          "type": "click",
+          "selector": ".option >> nth=3"
+        },
+        {
+          "type": "wait",
+          "ms": 380
+        },
+        {
+          "type": "click",
+          "selector": ".option >> nth=3"
+        },
+        {
+          "type": "wait",
+          "ms": 380
+        },
+        {
+          "type": "click",
+          "selector": ".option >> nth=2"
+        },
+        {
+          "type": "wait",
+          "ms": 380
+        },
+        {
+          "type": "click",
+          "selector": ".option >> nth=3"
+        },
+        {
+          "type": "wait",
+          "ms": 500
+        },
+        {
+          "type": "click",
+          "selector": "text=결과 보기"
+        },
+        {
+          "type": "wait",
+          "ms": 3500
+        },
+        {
+          "type": "scroll",
+          "y": 420
+        },
+        {
+          "type": "wait",
+          "ms": 3000
+        }
       ]
     },
     {
@@ -108,10 +279,19 @@
       "description": "출근하는 순간부터 오늘 번 돈이 1초마다 올라간다. 지금까지 번 돈을 아메리카노·삼각김밥·국밥 개수로 바꿔 보여주고, 퇴근까지 남은 시간과 월급날 D-day, 이번 달 누적 금액·근무 달력을 보여준다. 사장님 모드에서는 직원들에게 오늘 지급할 인건비가 실시간으로 쌓이고, 직원별 근무시간·월급날을 따로 정할 수 있으며 주 15시간 기준으로 4대보험 사업주 부담도 자동으로 더한다. 입력한 금액은 기기에만 저장. 재미로 보는 대략적인 값.",
       "audience": "월급날만 기다리는 20~40대 직장인, 알바생, 소상공인 사장님",
       "emoji": "💰",
-      "theme": { "bg1": "#082a1e", "bg2": "#12a06a", "accent": "#ffd166" },
+      "theme": {
+        "bg1": "#082a1e",
+        "bg2": "#12a06a",
+        "accent": "#ffd166"
+      },
       "url": "",
       "slides": {
-        "images": ["assets/apps/wolgeup-live-meter/shot-1.png", "assets/apps/wolgeup-live-meter/shot-2.png", "assets/apps/wolgeup-live-meter/shot-3.png", "assets/apps/wolgeup-live-meter/shot-4.png"],
+        "images": [
+          "assets/apps/wolgeup-live-meter/shot-1.png",
+          "assets/apps/wolgeup-live-meter/shot-2.png",
+          "assets/apps/wolgeup-live-meter/shot-3.png",
+          "assets/apps/wolgeup-live-meter/shot-4.png"
+        ],
         "crop": "412:682:112:322"
       },
       "actions": []
@@ -125,7 +305,11 @@
       "description": "3D 바다 찌낚시 게임. 찌가 들어가는 순간 챔질해서 물고기를 낚고, 장비를 업그레이드해 더 큰 어종에 도전한다. 출석·접속 보상 있음.",
       "audience": "낚시·캐주얼 게임 좋아하는 20~50대",
       "emoji": "🎣",
-      "theme": { "bg1": "#062a3a", "bg2": "#14596b", "accent": "#ffe066" },
+      "theme": {
+        "bg1": "#062a3a",
+        "bg2": "#14596b",
+        "accent": "#ffe066"
+      },
       "orientation": "landscape",
       "url": "",
       "actions": []
