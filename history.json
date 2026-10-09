@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "id": "2026-10-09-wolgeup-live-meter-t24p",
+    "app": "wolgeup-live-meter",
+    "template": "empathy",
+    "hook": "지금 이 순간에도\n월급이 *올라가는 중*",
+    "status": "draft",
+    "trigger": "release",
+    "updatedAt": "2026-10-09T07:51:04.686Z"
+  }
+]
