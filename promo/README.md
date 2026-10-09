@@ -54,10 +54,13 @@
 - `account.handle`: 인스타 아이디로 바꿔 주세요.
 
 ### 5. 배경음악
-`assets/bgm/`의 음원 중 하나를 무작위로 씁니다. 지금은 **Sunlit Road Trip**(marshall8112, Suno 제작) 한 곡입니다.
-- 같은 이름의 `.json`으로 시작 지점·볼륨을 정합니다: `{ "start": 30, "volume": 0.85 }` (곡의 신나는 구간부터 깔기)
+`assets/bgm/`의 곡을 **지금까지 만든 릴스(`reels/`)에 가장 적게 쓰인 곡부터** 돌려 씁니다. 지금은 marshall8112 님이 Suno 로 만든 20곡입니다.
+- 곡을 바꾸거나 추가할 때: `node src/bgm-analyze.mjs <음악 폴더>` → 곡마다 `.json`이 생깁니다
+  - `start`: 가장 신나는 20초 구간부터 깔기 · `tempo`: 느린 곡은 최대 1.2배 빠르게(음높이 유지) · `volume`: 곡마다 음량 맞춤 · `bpm`: 추정치
+  - 마음에 안 드는 곡은 `.json`의 값을 직접 고치거나 mp3를 지우면 됩니다
+- 특정 곡을 쓰려면 `BGM=<파일명.mp3>` 환경변수
 - API로 올리는 영상은 인스타 음원 라이브러리를 쓸 수 없으니 **상업적 사용이 허용된 음원**만 넣으세요 (Suno 곡은 유료 플랜에서 만든 곡이어야 상업적 사용 가능).
-- 코드로 자작곡을 만들 수도 있습니다: `node src/bgm-synth.mjs --name <이름> --bpm 112 --key 2` (예비곡은 `assets/bgm-alt/`)
+- 코드로 자작곡을 만들 수도 있습니다: `node src/bgm-synth.mjs` (예비곡은 `assets/bgm-alt/`)
 
 ### 6. 나레이션 (무료)
 자막을 Windows 내장 한국어 음성(`Microsoft Heami Desktop`)으로 읽어 영상에 넣습니다. **Windows PC에서 로컬로 만들 때만** 들어가고, GitHub Actions(우분투)에서는 나레이션 없이 만들어집니다.

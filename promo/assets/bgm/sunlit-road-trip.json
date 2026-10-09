@@ -1,1 +1,9 @@
-{ "start": 30, "volume": 0.85, "title": "Sunlit Road Trip", "by": "marshall8112 (Suno)" }
+{
+  "title": "Sunlit Road Trip",
+  "start": 49.7,
+  "tempo": 1,
+  "volume": 0.85,
+  "bpm": 118,
+  "seconds": 121,
+  "source": "6.mp3"
+}

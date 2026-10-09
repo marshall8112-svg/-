@@ -1,5 +1,5 @@
 {
-  "id": "2026-10-09-quit-dday-karf",
+  "id": "2026-10-09-quit-dday-zhj9",
   "app": "quit-dday",
   "appName": "퇴사 디데이 계산기",
   "template": "pov",
@@ -44,7 +44,7 @@
   },
   "caption": "질문 10개로 퇴사 각 재주는 계산기 만들어 봄 🚪\n나는 퇴사 지수 87%, D-16 나왔는데… 너는 며칠 남았어?\n월급날 친구 태그해서 같이 해봐 (재미로만!)\n\n👉 토스 앱에서 검색: 퇴사 디데이 계산기\n\n#퇴사 #직장인 #직장인공감 #퇴사각 #월요병 #번아웃 #심리테스트 #직장인밈 #퇴사디데이계산기 #토스미니앱 #토스에서만나보세요",
   "seconds": 17.4,
-  "bgm": "sunlit-road-trip.mp3",
+  "bgm": "forest-morning.mp3",
   "narrated": false,
   "captured": true
 }

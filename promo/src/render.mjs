@@ -120,13 +120,27 @@ async function shoot(browser, html, file, { w = W, h = H, transparent = true } =
   await p.close();
 }
 
-/** assets/bgm 의 음원 하나. 같은 이름의 .json 에 {"start": 초} 가 있으면 그 지점부터 쓴다 */
+/**
+ * assets/bgm 에서 곡 하나를 고른다 — 지금까지 만든 릴스(promo/reels/<앱>/<id>.meta.json)에 가장 적게 쓰인 곡부터 돌려 쓴다.
+ * 곡 옆 .json: { start: 초, tempo: 1~1.2(느린 곡 빠르게, 음높이 유지), volume: 배율 }
+ */
 async function pickBgm(assetsDir) {
-  const files = (await readdir(assetsDir).catch(() => [])).filter((f) => /\.(mp3|m4a|wav|aac)$/i.test(f));
+  const files = (await readdir(assetsDir).catch(() => [])).filter((f) => /.(mp3|m4a|wav|aac)$/i.test(f));
   if (!files.length) return null;
-  const file = path.join(assetsDir, files[Math.floor(Math.random() * files.length)]);
-  const side = JSON.parse(await readFile(file.replace(/\.[^.]+$/, '.json'), 'utf8').catch(() => '{}'));
-  return { file, start: Number(side.start) || 0, volume: Number(side.volume) || 0.85 };
+  const used = Object.fromEntries(files.map((f) => [f, 0]));
+  const reelsDir = path.join(assetsDir, '..', '..', 'reels');
+  for (const app of await readdir(reelsDir).catch(() => [])) {
+    for (const m of (await readdir(path.join(reelsDir, app)).catch(() => [])).filter((f) => f.endsWith('.meta.json'))) {
+      const bgm = JSON.parse(await readFile(path.join(reelsDir, app, m), 'utf8').catch(() => '{}')).bgm;
+      if (bgm in used) used[bgm]++;
+    }
+  }
+  const min = Math.min(...Object.values(used));
+  const pool = files.filter((f) => used[f] === min);
+  const name = process.env.BGM && files.includes(process.env.BGM) ? process.env.BGM : pool[Math.floor(Math.random() * pool.length)];
+  const file = path.join(assetsDir, name);
+  const side = JSON.parse(await readFile(file.replace(/.[^.]+$/, '.json'), 'utf8').catch(() => '{}'));
+  return { file, start: Number(side.start) || 0, tempo: Number(side.tempo) || 1, volume: Number(side.volume) || 0.85, title: side.title };
 }
 
 export function timeline(plan) {
@@ -246,7 +260,7 @@ export async function renderReel({ plan, app, account, capture, outDir, bgmDir, 
 
   // ── 오디오: 배경음악 (나레이션이 있으면 그 밑으로 낮춤)
   const vol = bgm ? (narration ? 0.22 : bgm.volume) : 1;
-  f.push(`[${audioIdx}:a]atrim=0:${T},asetpts=PTS-STARTPTS,afade=t=in:d=0.6,afade=t=out:st=${Math.max(0, total - 1.8).toFixed(3)}:d=1.8,volume=${vol}${narration ? '[music]' : '[aout]'}`);
+  f.push(`[${audioIdx}:a]${bgm && bgm.tempo !== 1 ? `atempo=${bgm.tempo},` : ''}atrim=0:${T},asetpts=PTS-STARTPTS,afade=t=in:d=0.6,afade=t=out:st=${Math.max(0, total - 1.8).toFixed(3)}:d=1.8,volume=${vol}${narration ? '[music]' : '[aout]'}`);
   if (narration) f.push(`[${voiceIdx}:a]atrim=0:${T}[voice];[music][voice]amix=inputs=2:normalize=0:duration=first[aout]`);
 
   const out = P('reel.mp4');
