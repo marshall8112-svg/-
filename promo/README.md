@@ -56,6 +56,12 @@
 ### 5. 배경음악 (선택)
 `assets/bgm/`에 mp3를 넣으면 무작위로 하나를 씁니다. API로 올리는 영상은 인스타 음원 라이브러리를 쓸 수 없습니다. 그러니 **상업적 사용과 SNS 업로드가 허용된 무료 음원**만 넣으세요.
 
+### 6. 나레이션 (무료)
+자막을 Windows 내장 한국어 음성(`Microsoft Heami Desktop`)으로 읽어 영상에 넣습니다. **Windows PC에서 로컬로 만들 때만** 들어가고, GitHub Actions(우분투)에서는 나레이션 없이 만들어집니다.
+- 말이 자막보다 길면 그 자막 시간을 자동으로 늘립니다. 배경음악이 있으면 목소리 밑으로 줄여서 깝니다.
+- 환경변수: `TTS_RATE`(빠르기 -10~10, 기본 2), `TTS_VOICE`, `TTS_DISABLE=1`(끄기)
+- 유료 TTS로 바꿀 때는 `src/narrate.mjs`의 음성 생성 부분만 교체하면 됩니다.
+
 ## 실행
 - 자동: 매일 09:17 (KST)에 실행됩니다. 시간은 `.github/workflows/reels-generate.yml`의 cron에서 바꿉니다.
 - 수동: **Actions → 릴스 생성 → Run workflow**를 누릅니다. 앱과 템플릿을 지정할 수도 있습니다.

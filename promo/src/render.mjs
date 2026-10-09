@@ -6,8 +6,8 @@ import { launchBrowser, ffmpeg } from './capture.mjs';
 
 const W = 1080;
 const H = 1920;
-const HOOK_SEC = 2.2;
-const CTA_SEC = 3;
+export const HOOK_SEC = 2.2;
+export const CTA_SEC = 3;
 const LANDSCAPE_CROP = 0.62;
 const FONT_CSS = `@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@700;900&display=block');`;
 const FONT_STACK = `'Noto Sans KR', 'Noto Sans CJK KR', 'Apple SD Gothic Neo', 'WenQuanYi Zen Hei', sans-serif`;
@@ -83,17 +83,20 @@ async function pickBgm(assetsDir) {
 }
 
 export function timeline(plan) {
-  const items = [{ kind: 'hook', text: plan.hook, start: 0, end: HOOK_SEC }];
-  let t = HOOK_SEC;
+  // 나레이션이 길면 fitPlan() 이 hookSeconds·ctaSeconds 를 늘려 둔다
+  const hookSec = plan.hookSeconds ?? HOOK_SEC;
+  const ctaSec = plan.ctaSeconds ?? CTA_SEC;
+  const items = [{ kind: 'hook', text: plan.hook, start: 0, end: hookSec }];
+  let t = hookSec;
   for (const s of plan.scenes) {
     items.push({ kind: 'scene', text: s.text, start: t, end: t + s.seconds });
     t += s.seconds;
   }
-  items.push({ kind: 'cta', start: t, end: t + CTA_SEC });
-  return { items, total: t + CTA_SEC };
+  items.push({ kind: 'cta', start: t, end: t + ctaSec });
+  return { items, total: t + ctaSec };
 }
 
-export async function renderReel({ plan, app, account, capture, outDir, bgmDir }) {
+export async function renderReel({ plan, app, account, capture, outDir, bgmDir, narration = null }) {
   const { items, total } = timeline(plan);
   let slot = null;
   if (capture) {
@@ -131,7 +134,9 @@ export async function renderReel({ plan, app, account, capture, outDir, bgmDir }
   const bgm = await pickBgm(bgmDir);
   if (bgm) args.push('-stream_loop', '-1', '-i', bgm);
   else args.push('-f', 'lavfi', '-t', `${total}`, '-i', 'anullsrc=channel_layout=stereo:sample_rate=48000');
-  const audioIdx = n;
+  const audioIdx = n++;
+  const voiceIdx = narration ? n++ : null;
+  if (narration) args.push('-i', narration);
 
   const f = [];
   let last = '[0:v]';
@@ -147,7 +152,10 @@ export async function renderReel({ plan, app, account, capture, outDir, bgmDir }
     last = `[v${i}]`;
   });
   f.push(`${last}format=yuv420p[vout]`);
-  f.push(`[${audioIdx}:a]atrim=0:${total},afade=t=in:d=0.3,afade=t=out:st=${Math.max(0, total - 1.5)}:d=1.5,volume=${bgm ? 0.8 : 1}[aout]`);
+  // 나레이션이 있으면 배경음악은 목소리 밑으로 깔리게 줄인다
+  const bgmVol = bgm ? (narration ? 0.22 : 0.8) : 1;
+  f.push(`[${audioIdx}:a]atrim=0:${total},afade=t=in:d=0.3,afade=t=out:st=${Math.max(0, total - 1.5)}:d=1.5,volume=${bgmVol}${narration ? '[music]' : '[aout]'}`);
+  if (narration) f.push(`[${voiceIdx}:a]atrim=0:${total}[voice];[music][voice]amix=inputs=2:normalize=0:duration=first[aout]`);
 
   const out = path.join(outDir, 'reel.mp4');
   args.push(
@@ -163,5 +171,5 @@ export async function renderReel({ plan, app, account, capture, outDir, bgmDir }
   // 미리보기용 썸네일 (hook 화면)
   await ffmpeg(['-y', '-ss', '1', '-i', out, '-frames:v', '1', '-vf', 'scale=540:-2', path.join(outDir, 'thumb.jpg')]);
   await writeFile(path.join(outDir, 'timeline.json'), JSON.stringify({ total, items: items.map(({ png, ...r }) => r) }, null, 2));
-  return { file: out, seconds: total, bgm: bgm ? path.basename(bgm) : null };
+  return { file: out, seconds: total, bgm: bgm ? path.basename(bgm) : null, narrated: !!narration };
 }

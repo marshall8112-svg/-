@@ -6,7 +6,8 @@ import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import { makePlan, buildCaption, TEMPLATES } from './plan.mjs';
 import { captureApp } from './capture.mjs';
-import { renderReel, timeline } from './render.mjs';
+import { renderReel, timeline, HOOK_SEC, CTA_SEC } from './render.mjs';
+import { narrationLines, synthesize, fitPlan, buildTrack } from './narrate.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const { values: opt } = parseArgs({
@@ -36,14 +37,24 @@ const plan = opt.plan
   : await makePlan({ app, account: config.account, template, recent: history.filter((h) => h.app === app.id).slice(-8).map((h) => h.hook) });
 console.log('  기획:', plan.hook, '/', plan.scenes.map((s) => s.text.replace(/\n/g, ' ')).join(' / '));
 
-const capture = await captureApp(app, outDir, timeline(plan).total).catch((e) => {
+// 나레이션(무료 TTS). 말이 자막보다 길면 자막 시간을 늘리므로 녹화보다 먼저 한다.
+const voiced = await synthesize(narrationLines(plan, app), outDir).catch((e) => {
+  console.warn(`  나레이션 실패, 자막만으로 진행: ${e.message}`);
+  return null;
+});
+if (voiced) fitPlan(plan, voiced, { hookSec: HOOK_SEC, ctaSec: CTA_SEC });
+else console.log('  나레이션 없음 (Windows 한국어 음성에서만 지원)');
+
+const { items, total } = timeline(plan);
+const capture = await captureApp(app, outDir, total).catch((e) => {
   console.warn(`  화면 녹화 실패, 그래픽만으로 진행: ${e.message}`);
   return null;
 });
-const video = await renderReel({ plan, app, account: config.account, capture, outDir, bgmDir: path.join(ROOT, 'assets', 'bgm') });
+const narration = voiced ? await buildTrack(items, voiced, total, outDir) : null;
+const video = await renderReel({ plan, app, account: config.account, capture, outDir, bgmDir: path.join(ROOT, 'assets', 'bgm'), narration });
 const caption = buildCaption(plan, app, config.account);
 
-const meta = { id, app: app.id, appName: app.name, template, hook: plan.hook, plan, caption, seconds: video.seconds, bgm: video.bgm, captured: !!capture };
+const meta = { id, app: app.id, appName: app.name, template, hook: plan.hook, plan, caption, seconds: video.seconds, bgm: video.bgm, narrated: video.narrated, captured: !!capture };
 await writeFile(path.join(outDir, 'meta.json'), JSON.stringify(meta, null, 2));
 console.log(`✔ ${video.file} (${video.seconds.toFixed(1)}초)`);
 
