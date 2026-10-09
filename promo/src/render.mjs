@@ -147,7 +147,10 @@ export async function renderReel({ plan, app, account, capture, outDir, bgmDir, 
   let slot = null;
   if (capture) {
     // 가로 화면은 가운데 62%만 잘라서 세로 영상에 크게 넣는다
-    slot = capture.landscape ? { w: 1000, h: Math.round((1000 * 390) / (844 * LANDSCAPE_CROP)), crop: LANDSCAPE_CROP } : { h: 1340, w: Math.round((1340 * 390) / 844), crop: 1 };
+    // 슬라이드(스크린샷)처럼 화면 비율이 넓으면 조금 낮춰서 가로 폭을 맞춘다
+    const aspect = capture.aspect ?? 390 / 844;
+    const ph = aspect > 0.55 ? 1230 : 1340;
+    slot = capture.landscape ? { w: 1000, h: Math.round((1000 * 390) / (844 * LANDSCAPE_CROP)), crop: LANDSCAPE_CROP } : { h: ph, w: Math.round(ph * aspect), crop: 1 };
     slot.w -= slot.w % 2;
     slot.h -= slot.h % 2;
     slot.x = Math.round((W - slot.w) / 2);

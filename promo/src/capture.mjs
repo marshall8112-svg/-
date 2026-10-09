@@ -39,6 +39,44 @@ async function runAction(page, a) {
   }
 }
 
+/**
+ * 앱 화면 녹화 대신 스크린샷 슬라이드로 '앱 화면' 영상을 만든다 (코드·공개 주소가 없는 앱용).
+ * apps.json: "slides": { "images": ["assets/apps/<id>/shot-1.png", ...], "crop": "w:h:x:y" }
+ * 장면(scene)이 바뀔 때마다 다음 장으로 밀려 넘어가고(slideleft), 각 장은 천천히 확대된다.
+ * 첫 장은 hook+첫 장면, k번째 장은 k번째 장면부터. 장이 모자라면 마지막 장을 유지한다.
+ */
+export async function slideshowApp(app, outDir, items, root) {
+  const s = app.slides;
+  if (!s?.images?.length) return null;
+  const XF = 0.45; // 전환 길이
+  const scenes = items.filter((it) => it.kind === 'scene');
+  const total = items.at(-1).end;
+  const starts = [0, ...scenes.slice(1, s.images.length).map((it) => it.start)];
+  const durs = starts.map((t, i) => (starts[i + 1] ?? total) - t);
+  const [cw, ch] = (s.crop ?? '').split(':').map(Number);
+  const W = 2 * (cw || 412);
+  const H = 2 * (ch || 682);
+  const args = ['-y'];
+  const f = [];
+  starts.forEach((_, i) => {
+    const d = durs[i] + (i < starts.length - 1 ? XF : 0);
+    args.push('-loop', '1', '-t', d.toFixed(3), '-i', path.join(root, s.images[i]));
+    const frames = Math.ceil(d * 30);
+    f.push(`[${i}:v]${s.crop ? `crop=${s.crop},` : ''}scale=${W * 2}:${H * 2},zoompan=z='1+0.05*on/${frames}':x='iw/2-iw/zoom/2':y='ih/2-ih/zoom/2':d=${frames}:s=${W}x${H}:fps=30,setsar=1,format=yuv420p[s${i}]`);
+  });
+  let last = '[s0]';
+  let offset = 0;
+  for (let i = 1; i < starts.length; i++) {
+    offset += durs[i - 1];
+    f.push(`${last}[s${i}]xfade=transition=slideleft:duration=${XF}:offset=${(offset - XF / 2).toFixed(3)}[x${i}]`);
+    last = `[x${i}]`;
+  }
+  const dest = path.join(outDir, 'capture.mp4');
+  // render 쪽이 앞 0.4초를 잘라 쓰므로 그만큼 앞에 덧댄다
+  await ffmpeg([...args, '-filter_complex', `${f.join(';')};${last}tpad=start_duration=0.4:start_mode=clone[out]`, '-map', '[out]', '-t', (total + 0.4).toFixed(3), '-c:v', 'libx264', '-crf', '18', '-pix_fmt', 'yuv420p', dest]);
+  return { file: dest, landscape: false, aspect: W / H };
+}
+
 export async function captureApp(app, outDir, seconds) {
   if (!app.url) return null;
   const landscape = app.orientation === 'landscape';

@@ -100,6 +100,23 @@
       ]
     },
     {
+      "id": "wolgeup-live-meter",
+      "enabled": true,
+      "name": "월급 미터기",
+      "keyword": "월급 미터기",
+      "tagline": "오늘 번 돈이 초 단위로 올라가요",
+      "description": "출근하는 순간부터 오늘 번 돈이 1초마다 올라간다. 지금까지 번 돈을 아메리카노·삼각김밥·국밥 개수로 바꿔 보여주고, 퇴근까지 남은 시간과 월급날 D-day, 이번 달 누적 금액·근무 달력을 보여준다. 사장님 모드에서는 직원들에게 오늘 지급할 인건비가 실시간으로 쌓이고, 직원별 근무시간·월급날을 따로 정할 수 있으며 주 15시간 기준으로 4대보험 사업주 부담도 자동으로 더한다. 입력한 금액은 기기에만 저장. 재미로 보는 대략적인 값.",
+      "audience": "월급날만 기다리는 20~40대 직장인, 알바생, 소상공인 사장님",
+      "emoji": "💰",
+      "theme": { "bg1": "#082a1e", "bg2": "#12a06a", "accent": "#ffd166" },
+      "url": "",
+      "slides": {
+        "images": ["assets/apps/wolgeup-live-meter/shot-1.png", "assets/apps/wolgeup-live-meter/shot-2.png", "assets/apps/wolgeup-live-meter/shot-3.png", "assets/apps/wolgeup-live-meter/shot-4.png"],
+        "crop": "412:682:112:322"
+      },
+      "actions": []
+    },
+    {
       "id": "fishing-game",
       "enabled": false,
       "name": "바다 찌낚시",

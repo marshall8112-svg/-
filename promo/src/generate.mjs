@@ -5,7 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import { makePlan, buildCaption, TEMPLATES } from './plan.mjs';
-import { captureApp } from './capture.mjs';
+import { captureApp, slideshowApp } from './capture.mjs';
 import { renderReel, timeline, HOOK_SEC, CTA_SEC } from './render.mjs';
 import { narrationLines, synthesize, fitPlan, buildTrack } from './narrate.mjs';
 
@@ -46,7 +46,7 @@ if (voiced) fitPlan(plan, voiced, { hookSec: HOOK_SEC, ctaSec: CTA_SEC });
 else console.log("  나레이션 없음 (배경음악만, 켜려면 TTS_ENABLE=1)");
 
 const { items, total } = timeline(plan);
-const capture = await captureApp(app, outDir, total).catch((e) => {
+const capture = await (app.url ? captureApp(app, outDir, total) : slideshowApp(app, outDir, items, ROOT)).catch((e) => {
   console.warn(`  화면 녹화 실패, 그래픽만으로 진행: ${e.message}`);
   return null;
 });
