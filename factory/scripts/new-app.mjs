@@ -53,7 +53,7 @@ const manifest = {
   emoji: opt.emoji,
   createdAt: new Date().toISOString(),
   // 등록 스크린샷 3장을 찍을 때 각 장면 직전에 실행할 동작. Claude가 앱에 맞게 채운다.
-  // type: wait | click | fill | scroll  (click/fill 은 selector 사용)
+  // type: wait | click | fill | scroll | upload  (click/fill/upload 은 selector 사용, upload 는 file = 앱 폴더 기준 경로)
   shots: [
     { name: 'screenshot-1', actions: [] },
     { name: 'screenshot-2', actions: [] },
@@ -62,6 +62,8 @@ const manifest = {
   ads: { banner: '', interstitial: '', rewarded: '', reward: { name: '', amount: 1 } },
   console: { workspaceId: null, miniAppId: null },
   bundle: { deploymentId: null, status: null, uploadedAt: null },
+  // 콘솔 웹 앱 정보(11단계). 1단계 기획 때 Claude가 채운다.
+  listing: { titleEn: '', category: ['생활', '콘텐츠', '테스트'], keywords: [], releaseNote: '', detail: '' },
   steps: {
     scaffold: 'done',
     build_app: 'todo',
@@ -70,6 +72,9 @@ const manifest = {
     ad_groups: 'todo',
     release_build: 'todo',
     upload: 'todo',
+    github: 'todo',
+    console_info: 'todo',
+    reel: 'todo',
     ready_for_review: 'todo',
   },
 };

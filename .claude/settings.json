@@ -16,6 +16,10 @@
       {
         "matcher": "mcp__apps-in-toss-console__.*",
         "hooks": [{ "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard-console.mjs\"" }]
+      },
+      {
+        "matcher": "mcp__(Claude_Browser|claude-in-chrome)__.*",
+        "hooks": [{ "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard-console.mjs\"" }]
       }
     ]
   }

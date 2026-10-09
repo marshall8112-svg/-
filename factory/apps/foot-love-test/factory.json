@@ -77,7 +77,27 @@
     "ad_groups": "done",
     "release_build": "done",
     "upload": "done",
+    "console_info": "done",
+    "github": "done",
+    "reel": "done",
     "ready_for_review": "done"
   },
-  "updatedAt": "2026-10-09T04:20:31.955Z"
+  "updatedAt": "2026-10-09T04:20:31.955Z",
+  "listing": {
+    "titleEn": "Toe Love Test",
+    "category": [
+      "생활",
+      "콘텐츠",
+      "테스트"
+    ],
+    "keywords": [
+      "연애테스트",
+      "심리테스트",
+      "발가락",
+      "연애스타일",
+      "궁합"
+    ],
+    "releaseNote": "(콘솔 웹에 입력 완료)",
+    "detail": "(콘솔 웹에 입력 완료)"
+  }
 }
