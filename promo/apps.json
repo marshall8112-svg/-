@@ -297,6 +297,32 @@
       "actions": []
     },
     {
+      "id": "chukuigeum-howmuch",
+      "enabled": true,
+      "name": "축의금 얼마낼까",
+      "keyword": "축의금 얼마낼까",
+      "tagline": "축의금·조의금 얼마 낼지 정해 드려요",
+      "description": "결혼식·장례식·돌잔치에 얼마를 낼지 고민될 때, 관계와 친한 정도·참석 여부·예식장 식대를 고르면 적정 금액(예: 10만 원)과 그 이유를 알려준다. 축의 봉투·조의 봉투 쓰는 법을 그림으로 보여 주고, 주고받은 경조사비를 장부에 기록할 수 있다. 금액은 일반적인 기준의 참고용, 기록은 기기에만 저장.",
+      "audience": "청첩장·부고 받고 금액 고민하는 20~40대 직장인",
+      "emoji": "💌",
+      "theme": {
+        "bg1": "#3a0f1d",
+        "bg2": "#d94a6a",
+        "accent": "#ffd166"
+      },
+      "url": "",
+      "slides": {
+        "images": [
+          "assets/apps/chukuigeum-howmuch/shot-1.png",
+          "assets/apps/chukuigeum-howmuch/shot-2.png",
+          "assets/apps/chukuigeum-howmuch/shot-3.png",
+          "assets/apps/chukuigeum-howmuch/shot-4.png"
+        ],
+        "crop": "412:682:112:322"
+      },
+      "actions": []
+    },
+    {
       "id": "sea-float-fishing",
       "enabled": true,
       "name": "바다 찌낚시",
